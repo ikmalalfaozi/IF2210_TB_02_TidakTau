@@ -9,6 +9,11 @@ protected:
     int id;
     string category;
 public:
+    Item(){
+        this->id = -111;
+        this->category = "none";
+    }
+    // Penambahan default constructor item
     Item(int id, string category);
     Item(const Item&);
     ~Item();

@@ -2,6 +2,8 @@
 #define INVENTORY_H
 #define CAPACITY 27
 #include <string>
+#include <variant>
+#include "Item.hpp"
 
 // BELUM SELESAI
 
@@ -13,9 +15,9 @@ public:
     Inventory();
     Inventory(Inventory&);
     ~Inventory();
-    void addItem(int itemID, int quantity);// Menambah item ke inventory
-    void deleteItem(int slotID, int quantity); // Membuang item dari inventory
-    void stackItem(int slotIDsrc, int slotIDdest); // Menumpuk item non tool yang sama pada inventory
+    void addItem(variant<Item, Tool, NonTool> item, int quantity);// Menambah item ke inventory
+    void deleteItem(string slotID, int quantity); // Membuang item dari inventory
+    void stackItem(string slotIDsrc, string slotIDdest); // Menumpuk item non tool yang sama pada inventory
     void useItem(int slotID); // Menggunakan item
 };
 
@@ -25,17 +27,19 @@ class InventorySlot {
         // Karena kelas item belum ada, 
         // sementara pakai tipe data integer
         string slotID;
-        int itemID;
+        variant<Item, Tool, NonTool> item;
         int quantity;
     public:
         InventorySlot();
 
+        InventorySlot& operator=(const InventorySlot&);
+
         void set_slotID(string slotid);
-        void set_itemID(int itemid);
+        void set_item(variant<Item, Tool, NonTool>& itemid);
         void set_quantity(int quantity);
 
         string get_slotID() const;
-        int get_itemID() const;
+        variant<Item, Tool, NonTool>& get_item();
         int get_quantity() const;
 };
 

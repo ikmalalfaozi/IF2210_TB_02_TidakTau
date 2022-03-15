@@ -30,22 +30,81 @@ Inventory::~Inventory(){
     delete[] this->itemlist;
 }
 
-void Inventory::addItem(int itemID, int quantity){
-    bool foundempty = false;
+void Inventory::addItem(variant<Item, Tool, NonTool> item, int quantity){
+    // Belum selesai secara sintaks
+    // Asumsi bahwa seluruh item dengan jumlah quantity akan masuk
+    int* alreadyAvailIdx = new int[27];
+    int y = 0; // indeks untuk iterasi alreadyAvailIdx
+    for (int x = 0; x < this->activesize; x++){
+        if (this->itemlist[x].get_item().getId() == item.getId()){
+            alreadyAvailIdx[y] = x;
+            y++;
+            // Barang dengan id sama ditemukan
+        }
+    } // List dengan id item yang sama sudah terisi
+    int j = 0; // dimulai dari awal lagi untuk dicek satu persatu
+    while (quantity != 0){
+        if (j == y){ // Tidak ada slot dengan id yang sama lagi
+            // Simpan sisanya ke slot yang kosong
+            this->itemlist[this->activesize].set_item(item);
+
+        }
+        int idx = alreadyAvailIdx[j];
+        int currentQuantity = this->itemlist[idx].get_quantity() + quantity;
+        if (currentQuantity >= 64){
+            this->itemlist[idx].set_quantity(63);
+            quantity = currentQuantity - 63;
+        }
+        else{
+            this->itemlist[idx].set_quantity(currentQuantity);
+            quantity = 0;
+        }
+        j++;
+    }
+
+    // Belum Fix
+}
+
+void Inventory::deleteItem(string slotID, int quantity){
+    bool found = false;
     int idx = 0;
-    do{
+    while(!found && idx < 27){
+        if (slotID == this->itemlist[idx].get_slotID()){
+            found = true;
+            int currentQuantity = this->itemlist[idx].get_quantity() - quantity;
+            this->itemlist[idx].set_quantity(currentQuantity);
+        }
         idx++;
-    }while(!foundempty);
-    // Belum bisa dilanjut
-    // Cek jenis item melalui parameter item
-    // Parameter yang diminta -> Item
+    }
 }
 
-void Inventory::deleteItem(int slotID, int quantity){
-    
-}
-
-void Inventory::stackItem(int slotIDsrc, int slotIDdest){
+void Inventory::stackItem(string slotIDsrc, string slotIDdest){
+    bool found = false;
+    int src, dest = 0;
+    while(!found && src < 27){
+        if (slotIDsrc == this->itemlist[src].get_slotID()){
+            found = true;
+        }
+        src++;
+    }
+    while(!found && dest < 27){
+        if (slotIDsrc == this->itemlist[src].get_slotID()){
+            found = true;
+        }
+        dest++;
+    }
+    src--;
+    dest--;
+    int stackQuantity = this->itemlist[src].get_quantity();
+    stackQuantity += this->itemlist[dest].get_quantity();
+    if (stackQuantity <= 64){
+        this->itemlist[dest].set_quantity(stackQuantity);
+        this->itemlist[src].set_quantity(0);
+    }
+    else{
+        this->itemlist[dest].set_quantity(stackQuantity);
+        this->itemlist[src].set_quantity(stackQuantity - 64);
+    }
     
 }
 
@@ -57,7 +116,7 @@ void Inventory::useItem(int slotID){
 
 InventorySlot::InventorySlot(){
     this->slotID = "II";
-    this->itemID = -999;
+    this->item = Item();
     this->quantity = 0;
 }
 
@@ -65,8 +124,14 @@ void InventorySlot::set_slotID(string slotid){
     this->slotID = slotid;
 }
 
-void InventorySlot::set_itemID(int itemid){
-    this->itemID = itemid;
+InventorySlot& InventorySlot::operator=(const InventorySlot& ivslot){
+    this->slotID = ivslot.slotID;
+    this->item = ivslot.item;
+    this->quantity = ivslot.quantity;
+}
+
+void InventorySlot::set_item(variant<Item, Tool, NonTool>& item){
+    this->item = item;
 }
 
 void InventorySlot::set_quantity(int quantity){
@@ -77,8 +142,8 @@ string InventorySlot::get_slotID() const{
     return this->slotID;
 }
 
-int InventorySlot::get_itemID() const{
-    return this->itemID;
+variant<Item, Tool, NonTool>& InventorySlot::get_item(){
+    return this->item;
 }
 
 int InventorySlot::get_quantity() const{
