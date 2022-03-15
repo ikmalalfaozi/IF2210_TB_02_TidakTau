@@ -87,6 +87,7 @@ void Inventory::stackItem(string slotIDsrc, string slotIDdest){
         }
         src++;
     }
+    found = false;
     while(!found && dest < 27){
         if (slotIDsrc == this->itemlist[src].get_slotID()){
             found = true;
