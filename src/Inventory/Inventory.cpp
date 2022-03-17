@@ -48,7 +48,6 @@ void Inventory::addItem(Item item, int quantity){
         if (j == y){ // Tidak ada slot dengan id yang sama lagi
             // Simpan sisanya ke slot yang kosong
             this->itemlist[this->activesize].set_item(item);
-
         }
         int idx = alreadyAvailIdx[j];
         int currentQuantity = this->itemlist[idx].get_quantity() + quantity;
@@ -68,8 +67,6 @@ void Inventory::addItem(Item item, int quantity){
 
 void Inventory::deleteItem(string slotID, int quantity){
     bool found = false;
-    Tool testo(std::get<Tool>(this->itemlist[0].get_item()));
-    this->addItem(testo, 1);
     int idx = 0;
     while(!found && idx < 27){
         if (slotID == this->itemlist[idx].get_slotID()){
@@ -144,7 +141,9 @@ InventorySlot& InventorySlot::operator=(const InventorySlot& ivslot){
     this->quantity = ivslot.quantity;
 }
 
-void InventorySlot::set_item(Item item){}
+void InventorySlot::set_item(Item item){
+    this->item = item;
+}
 
 void InventorySlot::set_quantity(int quantity){
     this->quantity = quantity;
