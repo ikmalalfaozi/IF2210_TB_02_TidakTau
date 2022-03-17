@@ -3,6 +3,7 @@
 #define CAPACITY 27
 #include <string>
 #include <variant>
+#include <iostream>
 #include "Item.hpp"
 
 // BELUM SELESAI
@@ -15,10 +16,10 @@ public:
     Inventory();
     Inventory(Inventory&);
     ~Inventory();
-    void addItem(variant<Item, Tool, NonTool> item, int quantity);// Menambah item ke inventory
+    void addItem(Item item, int quantity);// Menambah item ke inventory
     void deleteItem(string slotID, int quantity); // Membuang item dari inventory
     void stackItem(string slotIDsrc, string slotIDdest); // Menumpuk item non tool yang sama pada inventory
-    void useItem(int slotID); // Menggunakan item
+    void useItem(string slotID); // Menggunakan item
 };
 
 // Tahap perencanaan
@@ -35,7 +36,7 @@ class InventorySlot {
         InventorySlot& operator=(const InventorySlot&);
 
         void set_slotID(string slotid);
-        void set_item(variant<Item, Tool, NonTool>& itemid);
+        void set_item(Item itemid);
         void set_quantity(int quantity);
 
         string get_slotID() const;

@@ -30,19 +30,20 @@ Inventory::~Inventory(){
     delete[] this->itemlist;
 }
 
-void Inventory::addItem(variant<Item, Tool, NonTool> item, int quantity){
+void Inventory::addItem(Item item, int quantity){
     // Belum selesai secara sintaks
     // Asumsi bahwa seluruh item dengan jumlah quantity akan masuk
     int* alreadyAvailIdx = new int[27];
     int y = 0; // indeks untuk iterasi alreadyAvailIdx
     for (int x = 0; x < this->activesize; x++){
-        if (this->itemlist[x].get_item().getId() == item.getId()){
+        Item ivItem(std::get<Item>(this->itemlist[x].get_item())); // Ambil 
+        if (ivItem.getId() == item.getId()){
             alreadyAvailIdx[y] = x;
             y++;
             // Barang dengan id sama ditemukan
         }
     } // List dengan id item yang sama sudah terisi
-    int j = 0; // dimulai dari awal lagi untuk dicek satu persatu
+    int j = 0;
     while (quantity != 0){
         if (j == y){ // Tidak ada slot dengan id yang sama lagi
             // Simpan sisanya ke slot yang kosong
@@ -67,6 +68,8 @@ void Inventory::addItem(variant<Item, Tool, NonTool> item, int quantity){
 
 void Inventory::deleteItem(string slotID, int quantity){
     bool found = false;
+    Tool testo(std::get<Tool>(this->itemlist[0].get_item()));
+    this->addItem(testo, 1);
     int idx = 0;
     while(!found && idx < 27){
         if (slotID == this->itemlist[idx].get_slotID()){
@@ -109,8 +112,19 @@ void Inventory::stackItem(string slotIDsrc, string slotIDdest){
     
 }
 
-void Inventory::useItem(int slotID){
+void Inventory::useItem(string slotID){
     
+    bool found = false;
+    int idx = 0;
+    while(!found && idx < 27){
+        if (slotID == this->itemlist[idx].get_slotID()){
+            found = true;
+            //testo = std::get<Tool>(this->itemlist[idx].get_item());
+            Tool* testo = new Tool(std::get<Tool>(this->itemlist[idx].get_item()));
+            testo->setDuarbility(testo->getDurability() - 1);
+        }
+        idx++;
+    }
 }
 
 // -----------InventorySlot implementation-------------
@@ -127,13 +141,10 @@ void InventorySlot::set_slotID(string slotid){
 
 InventorySlot& InventorySlot::operator=(const InventorySlot& ivslot){
     this->slotID = ivslot.slotID;
-    this->item = ivslot.item;
     this->quantity = ivslot.quantity;
 }
 
-void InventorySlot::set_item(variant<Item, Tool, NonTool>& item){
-    this->item = item;
-}
+void InventorySlot::set_item(Item item){}
 
 void InventorySlot::set_quantity(int quantity){
     this->quantity = quantity;
