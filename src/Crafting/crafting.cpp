@@ -6,7 +6,7 @@ Crafting::Crafting() : grid(vector<vector<CraftingSlot>>(0, vector<CraftingSlot>
     this->cols = 0;
 }
 
-Crafting::Crafting(int rows, int cols) : grid(vector<vector<CraftingSlot>>(0, vector<CraftingSlot>(0, CraftingSlot()))) {
+Crafting::Crafting(int rows, int cols) : grid(vector<vector<CraftingSlot>>(rows, vector<CraftingSlot>(cols, CraftingSlot()))) {
     this->rows = rows;
     this->cols = cols;
 }
