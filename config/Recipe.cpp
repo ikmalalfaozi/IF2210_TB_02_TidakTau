@@ -1,77 +1,64 @@
 #include "recipe.hpp"
 #include <iostream>
 
-Recipe::Recipe(int row, int column)
+using namespace std;
+
+Recipe::Recipe()
 {
-    this->row = row;
-    this->column = column;
-    this->data = new string[row * column];
+    this->hasilRecipe = "-";
+    this->jumlah = 0;
 }
 
-Recipe::Recipe(int row, int column, string hasil, int jumlah)
+Recipe::Recipe(string hasilRecipe, int jumlah)
 {
-    this->row = row;
-    this->column = column;
-    this->data = new string[row * column];
-    this->hasil = hasil;
+    this->hasilRecipe = hasilRecipe;
     this->jumlah = jumlah;
 }
-Recipe::Recipe(const Recipe &r)
+
+int Recipe::getRow() const
 {
-    this->row = r.row;
-    this->column = r.column;
-    this->data = new string[row * column];
-    for (int i = 0; i < row * column; i++)
-    {
-        data[i] = r.data[i];
-    }
-    this->hasil = r.hasil;
-    this->jumlah = r.jumlah;
+    return row;
 }
 
-Recipe::~Recipe()
+int Recipe::getCol() const
 {
-    delete[] data;
+    return column;
 }
 
-int Recipe::getRow() const {
-    return this->row;
+string Recipe::getData() const
+{
+    return "a"; // belum tau bagaimana yang benar
 }
 
-int Recipe::getCol() const {
-    return this->column
+string Recipe::gethasilRecipe() const
+{
+    return this->hasilRecipe;
 }
 
-string* Recipe::getData() const {
-    return this->data
-}
-
-string Recipe::getHasil() const {
-    return this->hasil;
-}
-
-int Recipe::getJumlah() const {
+int Recipe::getJumlah() const
+{
     return this->jumlah;
 }
 
 void Recipe::setElemen()
 {
-    for (int i = 0; i < this->row * this->column; i++)
+    for (int i = 0; i < row; i++)
     {
-        string input;
-        cin >> input;
-        data[i] = input;
+        for (int j = 0; j < column; j++)
+        {
+            cin >> recipe[i][j];
+        }
     }
 }
 
-void Recipe::setElemen(int row, int column, string input)
+void Recipe::setElemen(int i, int j, string input)
 {
-    this->data[row * 3 + column] = input;
+    recipe[i][j] = input;
 }
 
-void Recipe::setHasil(string hasil)
+void Recipe::setHasilRecipe(string hasilRecipe)
 {
-    this->hasil = hasil;
+    this->hasilRecipe = hasilRecipe;
 }
 
 void Recipe::setJumlah(int jumlah)
@@ -81,19 +68,21 @@ void Recipe::setJumlah(int jumlah)
 
 void Recipe::printRecipe()
 {
-    for (int i = 0; i < this->row * this->column; i++)
+    for (int i = 0; i < row; i++)
     {
-        if (i == 0)
+        for (int j = 0; j < column; j++)
         {
-            cout << data[i] << " ";
+            cout << recipe[i][j] << "\t";
         }
-        else if (i % (this->row) != 0)
-        {
-            cout << data[i] << " ";
-        }
-        else
-        {
-            cout << data[i] << endl;
-        }
+        cout << endl;
     }
+}
+
+int main()
+{
+    Recipe A, B;
+    A.setElemen();
+    B.setElemen();
+    A.printRecipe();
+    B.printRecipe();
 }
