@@ -25,9 +25,17 @@ int Recipe::getCol() const
     return column;
 }
 
-string Recipe::getData() const
+Recipe Recipe::getData() const
 {
-    return "a"; // belum tau bagaimana yang benar
+    Recipe *matrikRecipe = new Recipe();
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+            matrikRecipe->recipe[i][j] = this->recipe[i][j];
+        }
+    }
+    return *matrikRecipe;
 }
 
 string Recipe::gethasilRecipe() const
@@ -76,13 +84,4 @@ void Recipe::printRecipe()
         }
         cout << endl;
     }
-}
-
-int main()
-{
-    Recipe A, B;
-    A.setElemen();
-    B.setElemen();
-    A.printRecipe();
-    B.printRecipe();
 }
