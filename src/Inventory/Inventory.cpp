@@ -2,6 +2,7 @@
 #include "Inventory.hpp"
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -124,39 +125,49 @@ void Inventory::useItem(string slotID){
     }
 }
 
-// -----------InventorySlot implementation-------------
+void Inventory::showInventory() const
+{
+    // Print Crafting Slots
+    cout << "Crafting" << endl;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            // string itemId = this->itemlist[i+j]->get_item().getId(); [ MASIH ERROR ]
+            // string quantity = this->itemlist[i+j]->get_quantity();
+            // cout << "[" + << itemId << ":" << quantity << "]\t"; 
+        }
+        cout << endl;
+    }
+    cout << endl;
 
-InventorySlot::InventorySlot(){
-    this->slotID = "II";
-    this->item = Item();
-    this->quantity = 0;
+    // Print Inventory slotIDsrc
+    cout << "Inventory" << endl;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 9; j++) {
+            // string itemId = this->itemlist[i+j]->get_item().getId(); [ MASIH ERROR ]
+            // string quantity = this->itemlist[i+j]->get_quantity();
+            // cout << "[" + << itemId << ":" << quantity << "]\t"; 
+        }
+        cout << endl;
+    }
+    cout << endl;
 }
 
-void InventorySlot::set_slotID(string slotid){
-    this->slotID = slotid;
-}
-
-InventorySlot& InventorySlot::operator=(const InventorySlot& ivslot){
-    this->slotID = ivslot.slotID;
-    this->quantity = ivslot.quantity;
-}
-
-void InventorySlot::set_item(Item item){
-    this->item = item;
-}
-
-void InventorySlot::set_quantity(int quantity){
-    this->quantity = quantity;
-}
-
-string InventorySlot::get_slotID() const{
-    return this->slotID;
-}
-
-variant<Item, Tool, NonTool>& InventorySlot::get_item(){
-    return this->item;
-}
-
-int InventorySlot::get_quantity() const{
-    return this->quantity;
+void Inventory::exportInventory(string filename)
+{
+    ofstream file(filename);
+    if (file.is_open()) {
+        for (int i = 0; i < CAPACITY; i++) {
+            // if (this->itemlist[i] != NULL) -> Memeriksa apakah item pada slot tersebut tersedia
+            // {
+                // string itemId = this->itemlist[i]->get_item().getId(); [ MASIH ERROR ]
+                // string quantity = this->itemlist[i]->get_quantity();
+                // file << itemId << ":" << quantity << endl; 
+            // }
+            // else
+            // {
+                // file << "0:0" << endl;
+            // }
+        }
+    }
+    file.close();
 }

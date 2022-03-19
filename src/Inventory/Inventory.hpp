@@ -5,6 +5,7 @@
 #include <variant>
 #include <iostream>
 #include "Item.hpp"
+#include "InventorySlot.hpp"
 
 // BELUM SELESAI
 
@@ -20,28 +21,8 @@ public:
     void deleteItem(string slotID, int quantity); // Membuang item dari inventory
     void stackItem(string slotIDsrc, string slotIDdest); // Menumpuk item non tool yang sama pada inventory
     void useItem(string slotID); // Menggunakan item
-};
-
-// Tahap perencanaan
-class InventorySlot {
-    private:
-        // Karena kelas item belum ada, 
-        // sementara pakai tipe data integer
-        string slotID;
-        variant<Item, Tool, NonTool> item;
-        int quantity;
-    public:
-        InventorySlot();
-
-        InventorySlot& operator=(const InventorySlot&);
-
-        void set_slotID(string slotid);
-        void set_item(Item itemid);
-        void set_quantity(int quantity);
-
-        string get_slotID() const;
-        variant<Item, Tool, NonTool>& get_item();
-        int get_quantity() const;
+    void showInventory() const; // Mencetak inventory
+    void exportInventory(string filename); // Meng-export inventory
 };
 
 #endif
