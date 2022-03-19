@@ -26,8 +26,8 @@ class Crafting {
 
         void setElmt(int i, int j, int value);
 
-        Recipe getRecipe(vector<Recipe> recipeList, vector<vector<CraftingSlot>> craftingSlots);
-        bool testRecipe(Recipe recipe, vector<vector<CraftingSlot>> craftingSlots);
+        // Test if items in the grid is the same with the recipe
+        bool testRecipe(vector<Recipe> recipeList);
 
         // Create an empty recipe matrix
         Recipe createEmptyRecipe();
@@ -43,7 +43,7 @@ class Crafting {
 
         // Create full recipe list
         vector<Recipe> createFullRecipeList(vector<Recipe> originalList);
-        void Craft();
+        void Craft(vector<Recipe> recipeList);
         void moveResulttoInventory();
 };
 

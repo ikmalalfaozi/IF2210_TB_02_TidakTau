@@ -6,7 +6,7 @@ Crafting::Crafting() : grid(vector<vector<CraftingSlot>>(0, vector<CraftingSlot>
     this->cols = 0;
 }
 
-Crafting::Crafting(int rows, int cols) : grid(vector<vector<CraftingSlot>>(rows, vector<CraftingSlot>(cols, CraftingSlot()))) {
+Crafting::Crafting(int rows, int cols) : grid(vector<vector<CraftingSlot>>(rows, vector<CraftingSlot>(rows, CraftingSlot()))) {
     this->rows = rows;
     this->cols = cols;
 }
@@ -28,26 +28,22 @@ void Crafting::setElmt(int i, int j, int value) {
     this->grid[i][j] = value;
 } */
 
-Recipe Crafting::getRecipe(vector<Recipe> recipeList, vector<vector<CraftingSlot>> craftingSlots) {
+// Test if items in the grid is the same with the recipe
+bool Crafting::testRecipe(vector<Recipe> recipeList) {
     vector<Recipe>::iterator it;
 
     for (it = recipeList.begin(); it != recipeList.end(); ++it) {
-        if (testRecipe(*it, craftingSlots)) {
-            return *it;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                // INI HARUS NYAMAIN DATA RECIPE SAMA DATA CRAFTING SLOTS
+                /*
+                if (recipe.getData()[i][j] != this->grid...) {
+                    return false;
+                } */
+            }
         }
     }
-}
-
-bool Crafting::testRecipe(Recipe recipe, vector<vector<CraftingSlot>> craftingSlots) {
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            // INI HARUS NYAMAIN DATA RECIPE SAMA DATA CRAFTING SLOTS
-            /*
-            if (recipe.getData()[i][j] != craftingSlots[i][j].getId()) {
-                return false;
-            } */
-        }
-    }
+    
     return true;
 }
 
@@ -190,6 +186,11 @@ vector<Recipe> Crafting::createFullRecipeList(vector<Recipe> originalList) {
     vector<Recipe> mirrorRecipeList;
     vector<Recipe>::iterator it;
     vector<Recipe>::iterator it2;
+    for (it = originalList.begin(); it != originalList.end(); ++it) {
+        if ((it->getRow() != 1) || (it->getRow() != 2) && (it->getCol() != 1)) {
+            recipeList.push_back(*it);
+        }
+    }
 
     for (it = originalList.begin(); it != originalList.end(); ++it) {
         if (it->getRow() == 3 && it->getCol() == 3) {
@@ -217,8 +218,11 @@ vector<Recipe> Crafting::createFullRecipeList(vector<Recipe> originalList) {
     return recipeList;
 }
 
-void Crafting::Craft() {
-
+void Crafting::Craft(vector<Recipe> recipeList) {
+    recipeList = createFullRecipeList(recipeList);
+    if (testRecipe(recipeList)) {
+        
+    }
 }
 
 void Crafting::moveResulttoInventory() {
