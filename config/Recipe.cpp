@@ -31,8 +31,15 @@ int Recipe::getCol() const
 
 vector<vector<string>> Recipe::getData() const
 {
-    return recipe;
+    return this->recipe;
 }
+
+string Recipe::getDataElmt(int i, int j) const 
+{
+    vector<string> recipeRow = this->recipe.at(i);
+    return recipeRow.at(j);
+}
+
 
 string Recipe::gethasilRecipe() const
 {

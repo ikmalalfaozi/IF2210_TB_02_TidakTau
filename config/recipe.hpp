@@ -21,6 +21,7 @@ public:
     int getRow() const;
     int getCol() const;
     vector<vector<string>> getData() const;
+    string getDataElmt(int i, int j) const;
     string gethasilRecipe() const;
     int getJumlah() const;
 
