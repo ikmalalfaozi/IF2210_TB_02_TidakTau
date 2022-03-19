@@ -11,7 +11,7 @@ Recipe::Recipe() : recipe(vector<vector<string>>(0, vector<string>(0, "-")))
     this->jumlah = 0;
 }
 
-Recipe::Recipe(int row, int column, string hasilRecipe, int jumlah) : recipe(vector<vector<string>>(0, vector<string>(0, "-")))
+Recipe::Recipe(int row, int column, string hasilRecipe, int jumlah) : recipe(vector<vector<string>>(row, vector<string>(column, "-")))
 {
     this->row = row;
     this->column = column;
