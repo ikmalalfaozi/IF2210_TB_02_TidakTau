@@ -25,17 +25,17 @@ int Recipe::getCol() const
     return column;
 }
 
-Recipe Recipe::getData() const
+vector<vector<string>> Recipe::getData() const
 {
-    Recipe *matrikRecipe = new Recipe();
+    vector<vector<string>> matrikRecipe;
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < column; j++)
         {
-            matrikRecipe->recipe[i][j] = this->recipe[i][j];
+            matrikRecipe[i][j] = recipe[i][j];
         }
     }
-    return *matrikRecipe;
+    return matrikRecipe;
 }
 
 string Recipe::gethasilRecipe() const
