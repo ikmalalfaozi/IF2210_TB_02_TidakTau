@@ -3,39 +3,35 @@
 
 using namespace std;
 
-Recipe::Recipe()
+Recipe::Recipe() : recipe(vector<vector<string>>(0, vector<string>(0, "-")))
 {
+    this->row = 0;
+    this->column = 0;
     this->hasilRecipe = "-";
     this->jumlah = 0;
 }
 
-Recipe::Recipe(string hasilRecipe, int jumlah)
+Recipe::Recipe(int row, int column, string hasilRecipe, int jumlah) : recipe(vector<vector<string>>(0, vector<string>(0, "-")))
 {
+    this->row = row;
+    this->column = column;
     this->hasilRecipe = hasilRecipe;
     this->jumlah = jumlah;
 }
 
 int Recipe::getRow() const
 {
-    return row;
+    return this->row;
 }
 
 int Recipe::getCol() const
 {
-    return column;
+    return this->column;
 }
 
 vector<vector<string>> Recipe::getData() const
 {
-    vector<vector<string>> matrikRecipe;
-    for (int i = 0; i < row; i++)
-    {
-        for (int j = 0; j < column; j++)
-        {
-            matrikRecipe[i][j] = recipe[i][j];
-        }
-    }
-    return matrikRecipe;
+    return recipe;
 }
 
 string Recipe::gethasilRecipe() const

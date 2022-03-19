@@ -5,19 +5,18 @@
 #include <vector>
 using namespace std;
 
-#define row 3
-#define column 3
-
 class Recipe
 {
 private:
-    string recipe[row][column];
+    vector<vector<string>> recipe;
+    int row;
+    int column;
     string hasilRecipe;
     int jumlah;
 
 public:
     Recipe();
-    Recipe(string hasilRecipe, int jumlah);
+    Recipe(int row, int column, string hasilRecipe, int jumlah);
 
     int getRow() const;
     int getCol() const;
