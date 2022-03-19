@@ -18,6 +18,12 @@ public:
     Recipe(const Recipe &recipe);
     ~Recipe();
 
+    int getRow() const;
+    int getCol() const;
+    string* getData() const;
+    string getHasil() const;
+    int getJumlah() const;
+
     void setElemen();
     void setElemen(int row, int column, string input);
     void setHasil(string hasil);

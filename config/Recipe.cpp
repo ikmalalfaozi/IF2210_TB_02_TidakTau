@@ -34,6 +34,26 @@ Recipe::~Recipe()
     delete[] data;
 }
 
+int Recipe::getRow() const {
+    return this->row;
+}
+
+int Recipe::getCol() const {
+    return this->column
+}
+
+string* Recipe::getData() const {
+    return this->data
+}
+
+string Recipe::getHasil() const {
+    return this->hasil;
+}
+
+int Recipe::getJumlah() const {
+    return this->jumlah;
+}
+
 void Recipe::setElemen()
 {
     for (int i = 0; i < this->row * this->column; i++)
