@@ -95,6 +95,6 @@ int Tool::getDurability() {
     return durability;
 }
 
-void Tool::setDuarbility(int durability) {
+void Tool::setDurability(int durability) {
     this->durability = durability;
 }

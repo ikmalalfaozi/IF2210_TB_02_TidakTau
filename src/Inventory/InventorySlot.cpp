@@ -7,7 +7,6 @@ using namespace std;
 
 InventorySlot::InventorySlot(){
     this->slotID = "II";
-    this->item = Item();
     this->quantity = 0;
 }
 
@@ -20,7 +19,7 @@ InventorySlot& InventorySlot::operator=(const InventorySlot& ivslot){
     this->quantity = ivslot.quantity;
 }
 
-void InventorySlot::set_item(Item item){
+void InventorySlot::set_item(Item* item){
     this->item = item;
 }
 
@@ -32,7 +31,7 @@ string InventorySlot::get_slotID() const{
     return this->slotID;
 }
 
-variant<Item, Tool, NonTool>& InventorySlot::get_item(){
+Item* InventorySlot::get_item() const{
     return this->item;
 }
 

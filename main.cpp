@@ -43,6 +43,7 @@ int main() {
     } else if (command == "CRAFT") {
       cout << "TODO" << endl;
     } else if (command == "GIVE") {
+      // inisialisasi item yang disebutkan di command
       string itemName;
       int itemQty;
       cin >> itemName >> itemQty;

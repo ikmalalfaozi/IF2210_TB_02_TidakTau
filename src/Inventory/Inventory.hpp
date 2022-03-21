@@ -17,7 +17,7 @@ public:
     Inventory();
     Inventory(Inventory&);
     ~Inventory();
-    void addItem(Item item, int quantity);// Menambah item ke inventory
+    void addItem(Item* item, int quantity);// Menambah item ke inventory
     void deleteItem(string slotID, int quantity); // Membuang item dari inventory
     void stackItem(string slotIDsrc, string slotIDdest); // Menumpuk item non tool yang sama pada inventory
     void useItem(string slotID); // Menggunakan item

@@ -21,6 +21,11 @@ public:
 
     int getId() const;
     string getCategory() const;
+
+    virtual string getType() const = 0;
+    virtual string getVarian() const = 0;
+    virtual int getDurability() = 0;
+    virtual void setDurability(int durability) = 0;
 };
 
 class NonTool : public Item {
@@ -52,7 +57,7 @@ public:
     string getType() const;
     string getVarian() const;
     int getDurability();
-    void setDuarbility(int durability);
+    void setDurability(int durability);
 };
 
 #endif

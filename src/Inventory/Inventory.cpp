@@ -31,14 +31,13 @@ Inventory::~Inventory(){
     delete[] this->itemlist;
 }
 
-void Inventory::addItem(Item item, int quantity){
+void Inventory::addItem(Item* item, int quantity){
     // Belum selesai secara sintaks
     // Asumsi bahwa seluruh item dengan jumlah quantity akan masuk
     int* alreadyAvailIdx = new int[27];
     int y = 0; // indeks untuk iterasi alreadyAvailIdx
     for (int x = 0; x < this->activesize; x++){
-        Item ivItem(std::get<Item>(this->itemlist[x].get_item())); // Ambil 
-        if (ivItem.getId() == item.getId()){
+        if (this->itemlist[x].get_item()->getId() == item->getId()){
             alreadyAvailIdx[y] = x;
             y++;
             // Barang dengan id sama ditemukan
@@ -118,8 +117,7 @@ void Inventory::useItem(string slotID){
         if (slotID == this->itemlist[idx].get_slotID()){
             found = true;
             //testo = std::get<Tool>(this->itemlist[idx].get_item());
-            Tool* testo = new Tool(std::get<Tool>(this->itemlist[idx].get_item()));
-            testo->setDuarbility(testo->getDurability() - 1);
+            this->itemlist[idx].get_item()->setDurability(this->itemlist[idx].get_item()->getDurability() - 1);
         }
         idx++;
     }

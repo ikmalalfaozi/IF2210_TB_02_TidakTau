@@ -12,7 +12,7 @@ class InventorySlot {
         // Karena kelas item belum ada, 
         // sementara pakai tipe data integer
         string slotID;
-        variant<Item, Tool, NonTool> item;
+        Item* item;
         int quantity;
     public:
         InventorySlot();
@@ -20,11 +20,11 @@ class InventorySlot {
         InventorySlot& operator=(const InventorySlot&);
 
         void set_slotID(string slotid);
-        void set_item(Item itemid);
+        void set_item(Item* itemid);
         void set_quantity(int quantity);
 
         string get_slotID() const;
-        variant<Item, Tool, NonTool>& get_item();
+        Item* get_item() const;
         int get_quantity() const;
 };
 
