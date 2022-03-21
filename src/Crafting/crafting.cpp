@@ -47,6 +47,23 @@ bool Crafting::testRecipe(vector<Recipe> recipeList) {
     return true;
 }
 
+// Get the recipe information
+Recipe Crafting::getRecipe(vector<Recipe> recipeList) {
+    vector<Recipe>::iterator it;
+    bool found = false;
+
+    for (it = recipeList.begin(); it != recipeList.end(); ++it) {
+        if (testRecipe(*it)) {
+            found = true
+            return (*it);
+        }
+    }
+
+    if (!found) {
+        throw "Recipe not found!";
+    }
+}
+
 // Create an empty 3x3 recipe matrix
 Recipe Crafting::createEmptyRecipe() {
     Recipe newRecipe;
@@ -218,13 +235,37 @@ vector<Recipe> Crafting::createFullRecipeList(vector<Recipe> originalList) {
     return recipeList;
 }
 
-void Crafting::Craft(vector<Recipe> recipeList) {
+void Crafting::Craft(Inventory inventory, vector<Recipe> recipeList) {
     recipeList = createFullRecipeList(recipeList);
+    // If the recipe is corrent, craft the item
     if (testRecipe(recipeList)) {
-        
+        Recipe result = getRecipe(recipeList);
+        bool possible = true;
+        int resultCount = 0;
+        string resultName = result.gethasilRecipe();
+        while (possible) {
+            for (int x = 0; x < 3; x++) {
+                for (int y = 0; y < 3; y++) {
+                    vector<CraftingSlot> gridRow = this->grid.at(i);
+                    // If there's an item inside the grid, then decrease the amount
+                    if (gridRow.at(j) != "-") {
+                        // If the item quantity inside the grid is 0, then it's no longer possible to craft
+                        if (gridRow.at(j).getQuantity() == 0) {
+                            possible = false;
+                        } else {
+                            resultCount += result.getJumlah();
+                            gridRow.at(j).setQuantity(gridRow.at(j).getQuantity() - 1);
+                        }
+                    }
+                }
+            }
+        }
+        moveResulttoInventory(inventory, result, resultCount);
+    } else {
+        throw "Invalid recipe!";
     }
 }
 
-void Crafting::moveResulttoInventory() {
-
+void Crafting::moveResulttoInventory(Inventory inventory, string result, int resultCount) {
+    Item resultItem = new Item()
 }

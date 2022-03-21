@@ -1,19 +1,23 @@
 #include "craftingSlot.hpp"
 
-int CraftingSlot::idNumber = -1;
+int CraftingSlot::idCounter = 0;
 
-CraftingSlot::CraftingSlot() : id(idNumber + 1) {
-    this->quantity = quantity;
-    idNumber++;
+CraftingSlot::CraftingSlot() {
+    this->slotID = "C" + idCounter;
+    this->item = Item();
+    this->quantity = 0;
+    idCounter++;
 }
 
-CraftingSlot::CraftingSlot(int quantity) : id(idNumber + 1) {
+CraftingSlot::CraftingSlot(int quantity) {
+    this->slotID = "C" + idCounter;
+    this->item = Item();
     this->quantity = quantity;
-    idNumber++;
+    idCounter++;
 }
 
-int CraftingSlot::getId() const {
-    return this->id
+int CraftingSlot::getSlotId() const {
+    return this->slotID
 }
 
 int CraftingSlot::getQuantity() const {
@@ -22,4 +26,12 @@ int CraftingSlot::getQuantity() const {
 
 Item CraftingSlot::getItem() const {
     return this->item
+}
+
+void CraftingSlot::setSlotID(string slotID) {
+    this->slotID = slotID;
+}
+
+void CraftingSlot::setQuantity(int quantity) {
+    this->quantity = quantity;
 }

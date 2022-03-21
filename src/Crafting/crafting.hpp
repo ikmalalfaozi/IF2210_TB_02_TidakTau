@@ -3,8 +3,10 @@
 
 #include <iostream>
 #include <vector>
-#include "../config/recipe.hpp"
 #include "craftingSlot.hpp"
+#include "./Inventory/Inventory.hpp"
+#include "./Item/Item.hpp"
+#include "../config/recipe.hpp"
 using namespace std;
 
 class Crafting {
@@ -29,6 +31,9 @@ class Crafting {
         // Test if items in the grid is the same with the recipe
         bool testRecipe(vector<Recipe> recipeList);
 
+        // Get the recipe information
+        Recipe getRecipe(vector<Recipe> recipeList);
+
         // Create an empty recipe matrix
         Recipe createEmptyRecipe();
 
@@ -43,8 +48,8 @@ class Crafting {
 
         // Create full recipe list
         vector<Recipe> createFullRecipeList(vector<Recipe> originalList);
-        void Craft(vector<Recipe> recipeList);
-        void moveResulttoInventory();
+        void Craft(Inventory inventory, vector<Recipe> recipeList);
+        void moveResulttoInventory(Inventory inventory, string result, int resultCount);
 };
 
 #endif
