@@ -3,13 +3,13 @@
 int CraftingSlot::idCounter = 0;
 
 CraftingSlot::CraftingSlot() {
-    this->slotID = "C" + idCounter;
+    this->slotID = "C" + to_string(idCounter);
     this->quantity = 0;
     idCounter++;
 }
 
 CraftingSlot::CraftingSlot(Item* item, int quantity) {
-    this->slotID = "C" + idCounter;
+    this->slotID = "C" + to_string(idCounter);
     this->item = item;
     this->quantity = quantity;
     idCounter++;

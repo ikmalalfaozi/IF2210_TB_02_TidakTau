@@ -1,6 +1,6 @@
 /* 
  * File: craftingSlotTest.cpp
- * compile test: g++ ./Crafting/craftingSlot.cpp ./Crafting/craftingSlotTest.cpp ./Item/Item.cpp ./Item/Tool.cpp ./Item/NonTool.cpp -o cslotTest
+ * compile test: g++ craftingSlot.cpp craftingSlotTest.cpp ../Item/Item.cpp ../Item/Tool.cpp ../Item/NonTool.cpp -o cslotTest
  */
 
 #include "craftingSlot.hpp"
