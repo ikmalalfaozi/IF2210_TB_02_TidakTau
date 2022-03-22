@@ -8,14 +8,13 @@
 
 class CraftingSlot {
     private:
-        const int id;
         string slotID;
         Item* item;
         int quantity;
-        static int idCounter;
     public:
         CraftingSlot();
-        CraftingSlot(Item* item, int quantity);
+        CraftingSlot(int id, Item* item, int quantity);
+        CraftingSlot& operator=(const CraftingSlot&);
 
         string getSlotID() const;
         Item* getItem() const;

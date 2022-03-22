@@ -196,11 +196,13 @@ void Inventory::moveInvToCraft(string slotIDsrc, string slotIDdest){
     while (i < 3 && !finish) {
         int j = 0;
         while (j < 3 && !finish) {
-            cout << this->crafting.getElmt(i, j).getSlotID() << endl;
             if (slotIDdest == this->crafting.getElmt(i, j).getSlotID()) {
-                cout << "|------------- MASUK GES LESGOW -------------|" << endl;
+                int newItem = this->itemlist[src].get_item()->getId();
+                
+                int quantity = this->crafting.getElmt(i, j).getQuantity() + 1;
                 this->crafting.getElmt(i, j).setItem(this->itemlist[src].get_item());
                 this->crafting.getElmt(i, j).setQuantity(this->crafting.getElmt(i, j).getQuantity() + 1);
+                discardItem(slotIDsrc, this->crafting.getElmt(i, j).getQuantity() - 1);
                 finish = true;
             }
             j++;

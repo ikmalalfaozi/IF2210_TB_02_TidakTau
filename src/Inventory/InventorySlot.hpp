@@ -2,7 +2,6 @@
 #define INVENTORYSLOT_H
 #define CAPACITY 27
 #include <string>
-#include <variant>
 #include <iostream>
 #include "../Item/Item.hpp"
 #include "../Item/Tool.hpp"

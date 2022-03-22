@@ -1,56 +1,44 @@
 #include "crafting.hpp"
 using namespace std;
 
-Crafting::Crafting() {
+Crafting::Crafting() : grid(0, vector<CraftingSlot>(0, CraftingSlot())) {
     this->rows = 0;
     this->cols = 0;
 }
 
-//: grid(vector<vector<CraftingSlot>>(rows, vector<CraftingSlot>(cols, CraftingSlot())))
-Crafting::Crafting(int rows, int cols) {
-    /*
-    CraftingSlot* slot0 = new CraftingSlot();
-    CraftingSlot* slot1 = new CraftingSlot();
-    CraftingSlot* slot2 = new CraftingSlot();
-    CraftingSlot* slot3 = new CraftingSlot();
-    CraftingSlot* slot4 = new CraftingSlot();
-    CraftingSlot* slot5 = new CraftingSlot();
-    CraftingSlot* slot6 = new CraftingSlot();
-    CraftingSlot* slot7 = new CraftingSlot();
-    CraftingSlot* slot8 = new CraftingSlot();
-    vector<vector<CraftingSlot>> grid {{*slot0, *slot1, *slot2}, {*slot3, *slot4, *slot5}, {*slot6, *slot7, *slot8}}; */
+Crafting::Crafting(int rows, int cols) : grid(rows, vector<CraftingSlot>(cols, CraftingSlot())){
+    int counter = 0;
+    vector<vector<CraftingSlot>>::iterator it;
+    vector<CraftingSlot>::iterator it2;
+    for (it = this->grid.begin(); it != this->grid.end(); ++it) {
+        for (it2 = it->begin(); it2 != it->end(); ++it2) {
+            it2->setSlotID("C" + to_string(counter));
+            counter++;
+        }
+    }
     this->rows = rows;
     this->cols = cols;
 }
 
-Crafting& Crafting::operator=(const Crafting& other){
-    this->grid = other.getGrid();
-    this->rows = other.getGridRows();
-    this->cols = other.getGridCols();
+
+Crafting& Crafting::operator=(const Crafting& other) {
+    this->grid = other.grid;
     return *this;
-}
+} 
 
 CraftingSlot Crafting::getElmt(int i, int j) {
-    return this->grid[i][j];
+    return this->grid.at(i).at(j);
 }
 
-vector<vector<CraftingSlot>>* Crafting::getGrid() {
+vector<vector<CraftingSlot>> Crafting::getGrid() {
     return this->grid;
 }
 
-int Crafting::getGridRows() {
-    return this->grid.size();
-}
-
-int Crafting::getGridCols() {
-    return this->grid[0].size();
-}
-
 // MASIH RUSAK
-/*
-void Crafting::setElmt(int i, int j, CraftingSlot value) {
-    this->grid[i][j] = value;
-} */
+
+void Crafting::setElmt(int i, int j, CraftingSlot& value) {
+    this->grid.at(i).at(j) = value;
+} 
 
 // Display grid
 void Crafting::displayCraftingGrid() {
@@ -75,7 +63,7 @@ bool Crafting::testRecipe(vector<Recipe> recipeList) {
                 // INI HARUS NYAMAIN DATA RECIPE SAMA DATA CRAFTING SLOTS
                 if ((*it).getDataElmt(i, j) != getElmt(i, j).getItem()->getType()) {
                     return false;
-         j       }
+                }
             }
         }
     }

@@ -11,16 +11,20 @@
 int main() {
 
     // Crafting* crafting = new Crafting(3,3);
-    CraftingSlot* c1 = new CraftingSlot();
-    CraftingSlot* c2 = new CraftingSlot();
-    CraftingSlot* c3 = new CraftingSlot();
+    Crafting craft(3,3);
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << craft.getGrid().at(i).at(j).getQuantity() << endl;
+        }
+    }
 
-    cout << c1->getSlotID() << endl;
-    cout << c2->getSlotID() << endl;
-    cout << c3->getSlotID() << endl;
-    // for (int i = 0; i < 3; i++) {
-    //     for (int j = 0; j < 3; j++) {
-    //         cout << crafting->getElmt(i,j).getSlotID() << endl;
-    //     }
-    // }
+    CraftingSlot cSlot;
+    cSlot.setQuantity(5);
+    craft.setElmt(0, 0, cSlot);
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << craft.getGrid().at(i).at(j).getQuantity() << endl;
+        }
+    }
 }

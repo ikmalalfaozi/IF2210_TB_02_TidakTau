@@ -12,9 +12,9 @@ using namespace std;
 
 class Crafting {
     private:
+        vector<vector<CraftingSlot>> grid;
         int rows;
         int cols;
-        vector<vector<CraftingSlot>>* grid = new vector<vector<CraftingSlot>>(3, vector<CraftingSlot>(3, CraftingSlot()));
     public:
         Crafting();
         Crafting(int rows, int cols);
@@ -23,15 +23,9 @@ class Crafting {
     
         /* Functions for crafting grid itself */
         CraftingSlot getElmt(int i, int j);
-        vector<vector<CraftingSlot>>* getGrid();
-        int getGridRows();
-        int getGridCols();
+        vector<vector<CraftingSlot>> getGrid();
 
-        /* Functions for recipe */
-        int getRecipeRows() const;
-        int getRecipeCols() const;
-
-        //void setElmt(int i, int j, CraftingSlot value);
+        void setElmt(int i, int j, CraftingSlot& value);
 
         // Display grid
         void displayCraftingGrid();
