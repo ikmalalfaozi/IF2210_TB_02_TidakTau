@@ -42,7 +42,7 @@ int main()
         cout << "Slot 1 -- Item 1 (Tool)" << endl;
         printInventorySlot(*slot1);
     } 
-    else 
+    else if (testChoice == 2)
     {
         // KETERANGAN: 
         // NONTOOL SEHARUSNYA TIDAK MEMILIKI DURABILITY, NAMUN AKHIRNYA DISET MENJADI 0
@@ -51,6 +51,14 @@ int main()
 
         slot2->set_slotID("I1");
         slot2->set_item(item2);
+        slot2->set_quantity(1);
+
+        cout << "Slot 2 -- Item 2 (NonTool)" << endl;
+        printInventorySlot(*slot2);
+    } else {
+        InventorySlot *slot2 = new InventorySlot();
+
+        slot2->set_slotID("I1");
         slot2->set_quantity(1);
 
         cout << "Slot 2 -- Item 2 (NonTool)" << endl;

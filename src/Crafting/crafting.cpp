@@ -1,32 +1,69 @@
 #include "crafting.hpp"
 using namespace std;
 
-Crafting::Crafting() : grid(vector<vector<CraftingSlot>>(0, vector<CraftingSlot>(0, CraftingSlot()))) {
+Crafting::Crafting() {
     this->rows = 0;
     this->cols = 0;
 }
 
-Crafting::Crafting(int rows, int cols) : grid(vector<vector<CraftingSlot>>(rows, vector<CraftingSlot>(rows, CraftingSlot()))) {
+//: grid(vector<vector<CraftingSlot>>(rows, vector<CraftingSlot>(cols, CraftingSlot())))
+Crafting::Crafting(int rows, int cols) {
+    /*
+    CraftingSlot* slot0 = new CraftingSlot();
+    CraftingSlot* slot1 = new CraftingSlot();
+    CraftingSlot* slot2 = new CraftingSlot();
+    CraftingSlot* slot3 = new CraftingSlot();
+    CraftingSlot* slot4 = new CraftingSlot();
+    CraftingSlot* slot5 = new CraftingSlot();
+    CraftingSlot* slot6 = new CraftingSlot();
+    CraftingSlot* slot7 = new CraftingSlot();
+    CraftingSlot* slot8 = new CraftingSlot();
+    vector<vector<CraftingSlot>> grid {{*slot0, *slot1, *slot2}, {*slot3, *slot4, *slot5}, {*slot6, *slot7, *slot8}}; */
     this->rows = rows;
     this->cols = cols;
 }
 
-CraftingSlot Crafting::getElmt(int i, int j) const {
+Crafting& Crafting::operator=(const Crafting& other){
+    this->grid = other.getGrid();
+    this->rows = other.getGridRows();
+    this->cols = other.getGridCols();
+    return *this;
+}
+
+CraftingSlot Crafting::getElmt(int i, int j) {
     return this->grid[i][j];
 }
 
-int Crafting::getGridRows() const {
+vector<vector<CraftingSlot>>* Crafting::getGrid() {
+    return this->grid;
+}
+
+int Crafting::getGridRows() {
     return this->grid.size();
 }
 
-int Crafting::getGridCols() const {
+int Crafting::getGridCols() {
     return this->grid[0].size();
 }
 
-/* MASIH RUSAK
-void Crafting::setElmt(int i, int j, int value) {
+// MASIH RUSAK
+/*
+void Crafting::setElmt(int i, int j, CraftingSlot value) {
     this->grid[i][j] = value;
 } */
+
+// Display grid
+void Crafting::displayCraftingGrid() {
+    vector<vector<CraftingSlot>>::iterator it;
+    vector<CraftingSlot>::iterator it2;
+    for (it = this->grid.begin(); it != this->grid.end(); ++it) {
+        cout << "\t\t\t";
+        for (it2 = it->begin(); it2 != it->end(); ++it2) {
+            cout << "[" << it2->getItem()->getId() << ":" << it2->getQuantity() << "]\t";
+        }
+        cout << endl;
+    }
+}
 
 // Test if items in the grid is the same with the recipe
 bool Crafting::testRecipe(vector<Recipe> recipeList) {
@@ -36,10 +73,9 @@ bool Crafting::testRecipe(vector<Recipe> recipeList) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 // INI HARUS NYAMAIN DATA RECIPE SAMA DATA CRAFTING SLOTS
-                /*
-                if (recipe.getData()[i][j] != this->grid...) {
+                if ((*it).getDataElmt(i, j) != getElmt(i, j).getItem()->getType()) {
                     return false;
-                } */
+         j       }
             }
         }
     }
@@ -50,18 +86,18 @@ bool Crafting::testRecipe(vector<Recipe> recipeList) {
 // Get the recipe information
 Recipe Crafting::getRecipe(vector<Recipe> recipeList) {
     vector<Recipe>::iterator it;
+    Recipe* ifNotFound = new Recipe();
     bool found = false;
 
     for (it = recipeList.begin(); it != recipeList.end(); ++it) {
-        if (testRecipe(*it)) {
-            found = true
+        if (testRecipe(recipeList)) {
+            found = true;
             return (*it);
         }
     }
 
-    if (!found) {
-        throw "Recipe not found!";
-    }
+    // throw "Recipe Not Found";
+    return *ifNotFound;
 }
 
 // Create an empty 3x3 recipe matrix
@@ -112,11 +148,13 @@ int Crafting::findMirrorPossibilities(Recipe recipe) {
     if (recipe.getRow() == 2 && recipe.getCol() == 1) {
         return 6;
     }
+    return -1;
 }
 
 // Create mirrored recipes for 3x3 recipes
 vector<Recipe> Crafting::createMirroredRecipe(Recipe recipe) {
     int possibilities = findMirrorPossibilities(recipe);
+    vector<Recipe> ifNotFound;
     if (possibilities == 1) {
         vector<Recipe> mirroredList;
         Recipe newRecipe(recipe.getRow(), recipe.getCol(), recipe.gethasilRecipe(), recipe.getJumlah());
@@ -195,6 +233,8 @@ vector<Recipe> Crafting::createMirroredRecipe(Recipe recipe) {
         }
         return mirroredList;
     }
+
+    return ifNotFound;
 }
 
 // Create full recipe list
@@ -235,37 +275,51 @@ vector<Recipe> Crafting::createFullRecipeList(vector<Recipe> originalList) {
     return recipeList;
 }
 
-void Crafting::Craft(Inventory inventory, vector<Recipe> recipeList) {
+/*
+void Crafting::Craft(ItemList config, Inventory& inventory, vector<Recipe> recipeList) {
     recipeList = createFullRecipeList(recipeList);
     // If the recipe is corrent, craft the item
     if (testRecipe(recipeList)) {
         Recipe result = getRecipe(recipeList);
         bool possible = true;
-        int resultCount = 0;
+        int resultQuantity = 0;
         string resultName = result.gethasilRecipe();
         while (possible) {
             for (int x = 0; x < 3; x++) {
                 for (int y = 0; y < 3; y++) {
-                    vector<CraftingSlot> gridRow = this->grid.at(i);
+                    vector<CraftingSlot> gridRow = this->grid.at(x);
                     // If there's an item inside the grid, then decrease the amount
-                    if (gridRow.at(j) != "-") {
+                    if (gridRow.at(y).getQuantity() != 0) {
                         // If the item quantity inside the grid is 0, then it's no longer possible to craft
-                        if (gridRow.at(j).getQuantity() == 0) {
+                        if (gridRow.at(y).getQuantity() == 0) {
                             possible = false;
                         } else {
-                            resultCount += result.getJumlah();
-                            gridRow.at(j).setQuantity(gridRow.at(j).getQuantity() - 1);
+                            resultQuantity += result.getJumlah();
+                            gridRow.at(y).setQuantity(gridRow.at(y).getQuantity() - 1);
                         }
                     }
                 }
             }
         }
-        moveResulttoInventory(inventory, result, resultCount);
+        int id = config.getConfigList()[resultName].getId();
+        string varian = config.getConfigList()[resultName].getVarian();
+        string category = config.getConfigList()[resultName].getCategory();
+        if (category == "TOOL") {
+            Tool* resultTool = new Tool(id, resultName, varian, 10);
+        } else if (category == "NONTOOL") {
+            NonTool* resultNonTool = new NonTool(id, resultName, varian);
+        }
+
     } else {
-        throw "Invalid recipe!";
+        throw "Invalid Recipe";
     }
+} */
+
+/*
+void Crafting::moveCraftingToInventory(string slotIDsrc, string slotIDdest) {
+
 }
 
-void Crafting::moveResulttoInventory(Inventory inventory, string result, int resultCount) {
-    Item resultItem = new Item()
-}
+void Crafting::moveResulttoInventory(Inventory& inventory, Item* item, int resultQuantity) {
+    inventory.giveItem(item, resultQuantity);
+} */

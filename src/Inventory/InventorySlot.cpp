@@ -7,6 +7,8 @@ using namespace std;
 
 InventorySlot::InventorySlot(){
     this->slotID = "II";
+    NonTool* itemdefault = new NonTool(0, "-", "-");
+    this->item = itemdefault;
     this->quantity = 0;
 }
 

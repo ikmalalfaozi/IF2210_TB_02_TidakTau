@@ -2,17 +2,19 @@
 
 int CraftingSlot::idCounter = 0;
 
-CraftingSlot::CraftingSlot() {
-    this->slotID = "C" + to_string(idCounter);
+CraftingSlot::CraftingSlot() : id(idCounter) {
+    NonTool* itemdefault = new NonTool(0, "-", "-");
+    this->slotID = "C" + to_string(this->id);
+    this->item = itemdefault;
     this->quantity = 0;
-    idCounter++;
+    this->idCounter = this->idCounter + 1;
 }
 
-CraftingSlot::CraftingSlot(Item* item, int quantity) {
-    this->slotID = "C" + to_string(idCounter);
+CraftingSlot::CraftingSlot(Item* item, int quantity) : id(idCounter) {
+    this->slotID = "C" + to_string(this->id);
     this->item = item;
     this->quantity = quantity;
-    idCounter++;
+    this->idCounter = this->idCounter + 1;
 }
 
 string CraftingSlot::getSlotID() const {

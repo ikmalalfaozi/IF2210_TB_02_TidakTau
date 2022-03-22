@@ -8,12 +8,12 @@
 
 class CraftingSlot {
     private:
+        const int id;
         string slotID;
         Item* item;
         int quantity;
-    public: 
         static int idCounter;
-
+    public:
         CraftingSlot();
         CraftingSlot(Item* item, int quantity);
 
@@ -24,7 +24,6 @@ class CraftingSlot {
         void setSlotID(string slotID);
         void setItem(Item* item);
         void setQuantity(int quantity);
-    
 };
 
 #endif

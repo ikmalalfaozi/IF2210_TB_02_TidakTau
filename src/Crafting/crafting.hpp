@@ -4,29 +4,37 @@
 #include <iostream>
 #include <vector>
 #include "craftingSlot.hpp"
-#include "./Inventory/Inventory.hpp"
-#include "./Item/Item.hpp"
-#include "../config/recipe.hpp"
+// #include "../Inventory/Inventory.hpp"
+#include "../Item/Item.hpp"
+#include "../../config/recipe.hpp"
+#include "../../config/ItemList.hpp"
 using namespace std;
 
 class Crafting {
     private:
-        vector<vector<CraftingSlot>> grid;
         int rows;
         int cols;
+        vector<vector<CraftingSlot>>* grid = new vector<vector<CraftingSlot>>(3, vector<CraftingSlot>(3, CraftingSlot()));
     public:
         Crafting();
         Crafting(int rows, int cols);
+
+        Crafting& operator=(const Crafting&);
+    
         /* Functions for crafting grid itself */
-        CraftingSlot getElmt(int i, int j) const;
-        int getGridRows() const;
-        int getGridCols() const;
+        CraftingSlot getElmt(int i, int j);
+        vector<vector<CraftingSlot>>* getGrid();
+        int getGridRows();
+        int getGridCols();
 
         /* Functions for recipe */
         int getRecipeRows() const;
         int getRecipeCols() const;
 
-        void setElmt(int i, int j, int value);
+        //void setElmt(int i, int j, CraftingSlot value);
+
+        // Display grid
+        void displayCraftingGrid();
 
         // Test if items in the grid is the same with the recipe
         bool testRecipe(vector<Recipe> recipeList);
@@ -48,8 +56,10 @@ class Crafting {
 
         // Create full recipe list
         vector<Recipe> createFullRecipeList(vector<Recipe> originalList);
-        void Craft(Inventory inventory, vector<Recipe> recipeList);
-        void moveResulttoInventory(Inventory inventory, string result, int resultCount);
+        //void Craft(ItemList config, Inventory& inventory, vector<Recipe> recipeList);
+
+        void moveCraftingToInventory(string slotIDsrc, string slotIDdest);
+        //void moveResulttoInventory(Inventory& inventory, Item* item, int resultQuantity);
 };
 
 #endif
