@@ -1,25 +1,28 @@
 #ifndef _CRAFTING_SLOT_HPP_
 #define _CRAFTING_SLOT_HPP_
 
-#include "../src/Item/Item.hpp"
+#include "../Item/Item.hpp"
+#include "../Item/Tool.hpp"
+#include "../Item/NonTool.hpp"
 #include <string>
 
 class CraftingSlot {
     private:
         string slotID;
-        Item item;
+        Item* item;
         int quantity;
     public: 
         static int idCounter;
 
         CraftingSlot();
-        CraftingSlot(int quantity);
+        CraftingSlot(Item* item, int quantity);
 
-        int getId() const;
-        Item getItem() const;
+        string getSlotID() const;
+        Item* getItem() const;
         int getQuantity() const;
 
         void setSlotID(string slotID);
+        void setItem(Item* item);
         void setQuantity(int quantity);
     
 };
