@@ -10,13 +10,15 @@ InventorySlot::InventorySlot(){
     this->quantity = 0;
 }
 
-void InventorySlot::set_slotID(string slotid){
-    this->slotID = slotid;
-}
-
 InventorySlot& InventorySlot::operator=(const InventorySlot& ivslot){
     this->slotID = ivslot.slotID;
     this->quantity = ivslot.quantity;
+    this->item = ivslot.item;
+    return *this;
+}
+
+void InventorySlot::set_slotID(string slotid){
+    this->slotID = slotid;
 }
 
 void InventorySlot::set_item(Item* item){

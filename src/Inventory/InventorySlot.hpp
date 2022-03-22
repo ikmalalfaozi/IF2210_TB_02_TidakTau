@@ -4,13 +4,13 @@
 #include <string>
 #include <variant>
 #include <iostream>
-#include "Item.hpp"
+#include "../Item/Item.hpp"
+#include "../Item/Tool.hpp"
+#include "../Item/NonTool.hpp"
 
 // Tahap perencanaan
 class InventorySlot {
     private:
-        // Karena kelas item belum ada, 
-        // sementara pakai tipe data integer
         string slotID;
         Item* item;
         int quantity;

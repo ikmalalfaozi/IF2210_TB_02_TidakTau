@@ -33,6 +33,7 @@ Inventory::~Inventory(){
 
 void Inventory::addItem(Item* item, int quantity){
     // Belum selesai secara sintaks
+
     // Asumsi bahwa seluruh item dengan jumlah quantity akan masuk
     int* alreadyAvailIdx = new int[27];
     int y = 0; // indeks untuk iterasi alreadyAvailIdx
@@ -43,6 +44,7 @@ void Inventory::addItem(Item* item, int quantity){
             // Barang dengan id sama ditemukan
         }
     } // List dengan id item yang sama sudah terisi
+
     int j = 0;
     while (quantity != 0){
         if (j == y){ // Tidak ada slot dengan id yang sama lagi
@@ -129,9 +131,7 @@ void Inventory::showInventory() const
     cout << "Crafting" << endl;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            // string itemId = this->itemlist[i+j]->get_item().getId(); [ MASIH ERROR ]
-            // string quantity = this->itemlist[i+j]->get_quantity();
-            // cout << "[" + << itemId << ":" << quantity << "]\t"; 
+            cout << "[" << this->itemlist[i+j].get_item()->getId() << ":" << this->itemlist[i+j].get_quantity() << "]\t"; 
         }
         cout << endl;
     }
@@ -141,10 +141,7 @@ void Inventory::showInventory() const
     cout << "Inventory" << endl;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 9; j++) {
-            // string itemId = this->itemlist[i+j]->get_item().getId(); [ MASIH ERROR ]
-            // string quantity = this->itemlist[i+j]->get_quantity();
-            // cout << "[" + << itemId << ":" << quantity << "]\t"; 
-        }
+            cout << "[" << this->itemlist[i+j].get_item()->getId() << ":" << this->itemlist[i+j].get_quantity() << "]\t";         }
         cout << endl;
     }
     cout << endl;
@@ -155,16 +152,14 @@ void Inventory::exportInventory(string filename)
     ofstream file(filename);
     if (file.is_open()) {
         for (int i = 0; i < CAPACITY; i++) {
-            // if (this->itemlist[i] != NULL) -> Memeriksa apakah item pada slot tersebut tersedia
-            // {
-                // string itemId = this->itemlist[i]->get_item().getId(); [ MASIH ERROR ]
-                // string quantity = this->itemlist[i]->get_quantity();
-                // file << itemId << ":" << quantity << endl; 
-            // }
-            // else
-            // {
-                // file << "0:0" << endl;
-            // }
+            if (this->itemlist[i].get_item() != NULL)
+            {
+                file << this->itemlist[i].get_item()->getId() << ":" << this->itemlist[i].get_quantity() << endl; 
+            }
+            else
+            {
+                file << "0:0" << endl;
+            }
         }
     }
     file.close();
