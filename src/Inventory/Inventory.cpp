@@ -155,7 +155,7 @@ void Inventory::moveStackItem(string slotIDsrc, string slotIDdest){
     }
 
     // Menumpuk item NonTool yang sama
-    if ((this->itemlist[src].get_item() == this->itemlist[dest].get_item()) && (this->itemlist[src].get_item()->getCategory() == "NonTool")) {
+    if ((this->itemlist[src].get_item()->getId() == this->itemlist[dest].get_item()->getId()) && (this->itemlist[src].get_item()->getCategory() == "NonTool")) {
         srcQuantity = this->itemlist[src].get_quantity();
         destQuantity = this->itemlist[dest].get_quantity();
         stackQuantity = srcQuantity + destQuantity;
