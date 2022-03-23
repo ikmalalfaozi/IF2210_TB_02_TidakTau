@@ -6,8 +6,7 @@
 
 using namespace std;
 
-Inventory::Inventory(){
-    this->crafting = Crafting(3,3);
+Inventory::Inventory() : crafting(3,3) {
     this->itemlist = new InventorySlot[CAPACITY];
     for (int i = 0; i < CAPACITY; i++){
         string slotIDgenerate = "I" + i;
@@ -197,11 +196,16 @@ void Inventory::moveInvToCraft(string slotIDsrc, string slotIDdest){
         int j = 0;
         while (j < 3 && !finish) {
             if (slotIDdest == this->crafting.getElmt(i, j).getSlotID()) {
-                int newItem = this->itemlist[src].get_item()->getId();
-                
-                int quantity = this->crafting.getElmt(i, j).getQuantity() + 1;
-                this->crafting.getElmt(i, j).setItem(this->itemlist[src].get_item());
-                this->crafting.getElmt(i, j).setQuantity(this->crafting.getElmt(i, j).getQuantity() + 1);
+                // INI YANG this->itemlist[src].get_item() masih error soalnya ga dapet itemnya, jadi temporary pake item1
+                Tool* item1 = new Tool(21, "-", "WOODEN_SWORD", 1);
+                //this->crafting.getElmt(i, j).setItem(this->itemlist[src].get_item());
+                CraftingSlot* newSlot = new CraftingSlot();
+                newSlot->setSlotID(this->crafting.getElmt(i, j).getSlotID());
+                newSlot->setItem(item1);
+                newSlot->setQuantity(this->crafting.getElmt(i, j).getQuantity() + 1);
+                this->crafting.setElmt(i, j, *newSlot);
+
+                // discardItem ga jalan, ga ngurang si itemnya
                 discardItem(slotIDsrc, this->crafting.getElmt(i, j).getQuantity() - 1);
                 finish = true;
             }
