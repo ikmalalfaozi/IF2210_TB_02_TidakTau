@@ -11,7 +11,7 @@ protected:
 public:
     Item(){
         this->id = -111;
-        this->category = "none";
+        this->category = "-";
     }
     // Penambahan default constructor item
     Item(int id, string category);

@@ -9,7 +9,7 @@ using namespace std;
 Inventory::Inventory() : crafting(3,3) {
     this->itemlist = new InventorySlot[CAPACITY];
     for (int i = 0; i < CAPACITY; i++){
-        string slotIDgenerate = "I" + i;
+        string slotIDgenerate = "I" + to_string(i);
         this->itemlist[i].set_slotID(slotIDgenerate);
         NonTool* itemdefault = new NonTool(0, "-", "-");
         this->itemlist[i].set_item(itemdefault);
@@ -49,36 +49,39 @@ void Inventory::giveItem(Item* item, int quantity){
     /* ALGORITMA */
     
     // Looping untuk mencari slot dengan id item yang sama
-    while (quantity != 0 && i < 27){
-        if (this->itemlist[i].get_item()->getId() == item->getId()){
-            int currentQuantity = this->itemlist[i].get_quantity();
-            if (currentQuantity + quantity > 64) {
-                this->itemlist[i].set_quantity(64);
-                quantity -= 64 - currentQuantity;
-            } else {
-                this->itemlist[i].set_quantity(currentQuantity + quantity);
-                quantity = 0;
+    if (quantity >= 0) {
+        while (quantity != 0 && i < 27){
+            if (this->itemlist[i].get_item()->getId() == item->getId()){
+                int currentQuantity = this->itemlist[i].get_quantity();
+                if (currentQuantity + quantity > 64) {
+                    this->itemlist[i].set_quantity(64);
+                    quantity -= 64 - currentQuantity;
+                } else {
+                    this->itemlist[i].set_quantity(currentQuantity + quantity);
+                    quantity = 0;
+                }
             }
+            i++;
         }
-        i++;
-    }
 
-    i = 0; // Inisialisasi ulang untuk iterasi
-    while (quantity != 0 && i < 27){
-        // Periksa apakah slot kosong
-        if (this->itemlist[i].get_quantity() == 0){
-            // Masukkan item ke slot
-            this->itemlist[i].set_item(item);
-            if (quantity > 64){
-                this->itemlist[i].set_quantity(64);
-                quantity -= 64;
+        i = 0; // Inisialisasi ulang untuk iterasi
+        while (quantity != 0 && i < 27){
+            // Periksa apakah slot kosong
+            if (this->itemlist[i].get_quantity() == 0){
+                // Masukkan item ke slot
+                this->itemlist[i].set_item(item);
+                if (quantity > 64){
+                    this->itemlist[i].set_quantity(64);
+                    quantity -= 64;
+                }
+                else{
+                    this->itemlist[i].set_quantity(quantity);
+                    quantity = 0;
+                }
             }
-            else{
-                this->itemlist[i].set_quantity(quantity);
-                quantity = 0;
-            }
+            i++;
         }
-        i++;
+
     }
 }
 
@@ -90,20 +93,21 @@ void Inventory::discardItem(string slotID, int quantity){
      */
 
     /* KAMUS LOKAL */
-    bool found = false;
-    int idx = 0;
+    // bool found = false;
+    // int idx = 0;
+    int idx;
+    int currentQuantity;
     
     /* ALGORITMA */ 
-    while(!found && idx < 27){
-        if (slotID == this->itemlist[idx].get_slotID()){
-            found = true;
-            int currentQuantity = this->itemlist[idx].get_quantity() - quantity;
-            if (currentQuantity >= 0){
-                this->itemlist[idx].set_quantity(currentQuantity);
-            }
-        } 
-        else {
-            idx++;
+    idx = stoi(slotID.erase(0,1));
+    if (quantity >= 0) {
+        currentQuantity = this->itemlist[idx].get_quantity() - quantity;
+        if (currentQuantity > 0){
+            this->itemlist[idx].set_quantity(currentQuantity);
+        } else if (currentQuantity == 0){
+            this->itemlist[idx].set_quantity(0);
+            NonTool* itemdefault = new NonTool(0, "-", "-");
+            this->itemlist[idx].set_item(itemdefault);
         }
     }
 }
@@ -121,7 +125,7 @@ void Inventory::moveStackItem(string slotIDsrc, string slotIDdest){
 
     /* KAMUS LOKAL */
     bool found;
-    int stackQuantity;
+    int srcQuantity, destQuantity, stackQuantity;
     int src, dest;
 
     /* ALGORITMA */
@@ -142,7 +146,7 @@ void Inventory::moveStackItem(string slotIDsrc, string slotIDdest){
     found = false;
     dest = 0;
     while(!found && dest < 27){
-        if (slotIDsrc == this->itemlist[src].get_slotID()){
+        if (slotIDdest == this->itemlist[dest].get_slotID()){
             found = true;
         }
         else{
@@ -150,19 +154,23 @@ void Inventory::moveStackItem(string slotIDsrc, string slotIDdest){
         }
     }
 
-    // Menumpuk item
-    stackQuantity = this->itemlist[src].get_quantity() + this->itemlist[dest].get_quantity();
-    if (stackQuantity <= 64){
-        this->itemlist[dest].set_quantity(stackQuantity);
-        this->itemlist[src].set_quantity(0);
-    }
-    else{
-        this->itemlist[dest].set_quantity(64);
-        this->itemlist[src].set_quantity(stackQuantity - 64);
+    // Menumpuk item NonTool yang sama
+    if ((this->itemlist[src].get_item() == this->itemlist[dest].get_item()) && (this->itemlist[src].get_item()->getCategory() == "NonTool")) {
+        srcQuantity = this->itemlist[src].get_quantity();
+        destQuantity = this->itemlist[dest].get_quantity();
+        stackQuantity = srcQuantity + destQuantity;
+        if (stackQuantity <= 64){
+            this->itemlist[dest].set_quantity(stackQuantity);
+            this->discardItem(slotIDsrc, srcQuantity);
+        }
+        else{
+            this->itemlist[dest].set_quantity(64);
+            this->discardItem(slotIDsrc, 64 - destQuantity);
+        }
     }
 }
 
-void Inventory::moveInvToCraft(string slotIDsrc, string slotIDdest){
+void Inventory::moveInventoryToCrafting(string slotIDsrc, string slotIDdest){
     /* MEMINDAHKAN ITEM INVENTORY KE CRAFTING */
     /*
      * Satu jenis item dapat dipindahkan ke beberapa slot crafting. 
@@ -184,8 +192,7 @@ void Inventory::moveInvToCraft(string slotIDsrc, string slotIDdest){
     while(!found && src < 27){
         if (slotIDsrc == this->itemlist[src].get_slotID()){
             found = true;
-        }
-        else{
+        } else{
             src++;
         }
     }
@@ -196,22 +203,72 @@ void Inventory::moveInvToCraft(string slotIDsrc, string slotIDdest){
         int j = 0;
         while (j < 3 && !finish) {
             if (slotIDdest == this->crafting.getElmt(i, j).getSlotID()) {
-                // INI YANG this->itemlist[src].get_item() masih error soalnya ga dapet itemnya, jadi temporary pake item1
-                Tool* item1 = new Tool(21, "-", "WOODEN_SWORD", 1);
-                //this->crafting.getElmt(i, j).setItem(this->itemlist[src].get_item());
                 CraftingSlot* newSlot = new CraftingSlot();
                 newSlot->setSlotID(this->crafting.getElmt(i, j).getSlotID());
-                newSlot->setItem(item1);
+                newSlot->setItem(this->itemlist[src].get_item());
                 newSlot->setQuantity(this->crafting.getElmt(i, j).getQuantity() + 1);
                 this->crafting.setElmt(i, j, *newSlot);
+                delete newSlot;
 
-                // discardItem ga jalan, ga ngurang si itemnya
-                discardItem(slotIDsrc, this->crafting.getElmt(i, j).getQuantity() - 1);
+                discardItem(slotIDsrc, 1);
                 finish = true;
             }
             j++;
         }
         i++;
+    }
+}
+
+void Inventory::moveCraftingToInventory(string slotIDsrc, string slotIDdest) {
+    /* KAMUS LOKAL */
+    bool found, finish;
+    int i, j;
+    int dst, quantity;
+    Item* item;
+
+    /* ALGORITMA */
+    found = false;
+    i = 0;
+    while (i < 3 && !found) {
+        j = 0;
+        while (j < 3 && !found) {
+            if (slotIDsrc == this->crafting.getElmt(i, j).getSlotID()) {
+                item = this->crafting.getElmt(i, j).getItem();
+                quantity = this->crafting.getElmt(i, j).getQuantity();
+                NonTool* itemdefault = new NonTool(0, "-", "-");
+                CraftingSlot* newSlot = new CraftingSlot();
+                newSlot->setSlotID(this->crafting.getElmt(i, j).getSlotID());
+                newSlot->setItem(itemdefault);
+                newSlot->setQuantity(0);
+                this->crafting.setElmt(i, j, *newSlot);
+                delete newSlot;
+                found = true;
+            } 
+            j++;
+        }
+        i++;
+    }
+
+    dst = 0;
+    i = 0;
+    finish = false;
+    while(!finish && dst < 27){
+        if (slotIDdest == this->itemlist[dst].get_slotID()){
+            finish = true;
+        } else{
+            dst++;
+        }
+    }
+    
+    if (this->itemlist[dst].get_item()->getId() == this->itemlist[dst].get_item()->getId()) {
+        this->itemlist[dst].set_item(item);
+        this->itemlist[dst].set_quantity(this->itemlist[dst].get_quantity() + quantity); 
+    }
+    else if (this->itemlist[dst].get_item()->getId() == 0) {
+        this->itemlist[dst].set_item(item);
+        this->itemlist[dst].set_quantity(quantity); 
+    } else {
+        cout << "Jenis item berbeda" << endl;
     }
 }
 
@@ -263,8 +320,13 @@ void Inventory::showInventory()
     // cout << "[" << id << ":" << qty << "]";
     for (int i = 0; i < 27; i++) {
         int id = this->itemlist[i].get_item()->getId();
-        int qty = this->itemlist[i].get_quantity();
-        cout << "[" << id << ":" << qty << "]";
+        if (this->itemlist[i].get_item()->getCategory() == "Tool") {
+            int dur = this->itemlist[i].get_item()->getDurability();
+            cout << "[" << id << ":" << dur << "]";
+        } else {
+            int qty = this->itemlist[i].get_quantity();
+            cout << "[" << id << ":" << qty << "]";
+        }
         if ((i + 1) % 9 == 0) {
             cout << "\n";
         } else {
@@ -279,7 +341,10 @@ void Inventory::exportInventory(string filename)
     ofstream file(filename);
     if (file.is_open()) {
         for (int i = 0; i < CAPACITY; i++) {
-            file << this->itemlist[i].get_item()->getId() << ":" << this->itemlist[i].get_quantity() << endl; 
+            file << this->itemlist[i].get_item()->getId() << ":" << this->itemlist[i].get_quantity(); 
+            if (i != CAPACITY - 1) {
+                file << endl;
+            }
         }
     }
     file.close();

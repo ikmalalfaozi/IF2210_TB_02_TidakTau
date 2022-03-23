@@ -2,7 +2,7 @@
 
 NonTool::NonTool(int id, string type) : Item(id, "NonTool") {
     this->type = type;
-    this->varian = "None";
+    this->varian = "-";
 }
 
 NonTool::NonTool(int id, string type, string varian) : Item (id, "NonTool") {

@@ -10,15 +10,19 @@ using namespace std;
 class ItemList
 {
 private:
-    string name;
+    string type;
     map<string, ItemElmt> configList;
 public:
     ItemList();
-    ItemList(string name, int id, string category, string varian);
+    //ItemList(string type, int id, string category, string varian);
 
     //method
-    string getName() const;
+    string getType() const;
     map<string, ItemElmt> getConfigList() const;
+    ItemElmt getItemElmt(string type);
+
+    void setType(string type);
+    void addItemElmt(string type, int id, string category, string varian);
 };
 
 #endif

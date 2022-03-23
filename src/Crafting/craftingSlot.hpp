@@ -5,6 +5,7 @@
 #include "../Item/Tool.hpp"
 #include "../Item/NonTool.hpp"
 #include <string>
+#include <iostream>
 
 class CraftingSlot {
     private:

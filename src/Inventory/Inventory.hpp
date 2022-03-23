@@ -26,7 +26,8 @@ public:
     void giveItem(Item* item, int quantity);// Menambah item ke inventory
     void discardItem(string slotID, int quantity); // Membuang item dari inventory
     void moveStackItem(string slotIDsrc, string slotIDdest); // Menumpuk item non tool yang sama pada inventory
-    void moveInvToCraft(string slotIDsrc, string slotIDdest); // Memindahkan item dri inventory ke craft
+    void moveInventoryToCrafting(string slotIDsrc, string slotIDdest); // Memindahkan item dri inventory ke craft
+    void moveCraftingToInventory(string slotIDsrc, string slotIDdest);
     void useItem(string slotID); // Menggunakan item
     
     void showInventory(); // Mencetak inventory

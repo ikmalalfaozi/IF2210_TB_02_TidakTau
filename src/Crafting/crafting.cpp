@@ -145,7 +145,7 @@ vector<Recipe> Crafting::createMirroredRecipe(Recipe recipe) {
     vector<Recipe> ifNotFound;
     if (possibilities == 1) {
         vector<Recipe> mirroredList;
-        Recipe newRecipe(recipe.getRow(), recipe.getCol(), recipe.gethasilRecipe(), recipe.getJumlah());
+        Recipe newRecipe(recipe.getRow(), recipe.getCol(), recipe.getHasilRecipe(), recipe.getJumlah());
 
         for (int i = 0; i < 3; i++) {
             int x = 0;
@@ -164,7 +164,7 @@ vector<Recipe> Crafting::createMirroredRecipe(Recipe recipe) {
         vector<string> recipeShape;
         vector<string>::iterator it;
         vector<Recipe> mirroredList;
-        Recipe emptyRecipe(recipe.getRow(), recipe.getCol(), recipe.gethasilRecipe(), recipe.getJumlah());
+        Recipe emptyRecipe(recipe.getRow(), recipe.getCol(), recipe.getHasilRecipe(), recipe.getJumlah());
 
         for (int i = 0; i < 3; i++) {
             recipeShape.push_back(recipe.getDataElmt(i, 1));
@@ -186,7 +186,7 @@ vector<Recipe> Crafting::createMirroredRecipe(Recipe recipe) {
 
     if (possibilities == 6) {
         vector<Recipe> mirroredList;
-        Recipe emptyRecipe(recipe.getRow(), recipe.getCol(), recipe.gethasilRecipe(), recipe.getJumlah());
+        Recipe emptyRecipe(recipe.getRow(), recipe.getCol(), recipe.getHasilRecipe(), recipe.getJumlah());
 
         for (int i = 0; i < 3; i++) {
             emptyRecipe = createEmptyRecipe();
@@ -210,7 +210,7 @@ vector<Recipe> Crafting::createMirroredRecipe(Recipe recipe) {
 
     if (possibilities == 9) {
         vector<Recipe> mirroredList;
-        Recipe emptyRecipe(recipe.getRow(), recipe.getCol(), recipe.gethasilRecipe(), recipe.getJumlah());
+        Recipe emptyRecipe(recipe.getRow(), recipe.getCol(), recipe.getHasilRecipe(), recipe.getJumlah());
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {

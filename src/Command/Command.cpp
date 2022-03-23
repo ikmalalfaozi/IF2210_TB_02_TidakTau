@@ -4,7 +4,7 @@
 
 Command::Command() {
     size = 0;
-    command = new std::string[10];
+    command = new std::string[13];
     for(int i = 0; i < 10; i++) {
         command[i] = "";
     }
@@ -16,7 +16,7 @@ Command::~Command() {
 
 Command::Command(Command& c){
     this->size = c.size;
-    this->command = new string[10];
+    this->command = new string[13];
     for(int i = 0; i < size; i++) {
         command[i] = c.command[i];
     }

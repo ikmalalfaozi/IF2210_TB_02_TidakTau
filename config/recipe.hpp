@@ -9,23 +9,24 @@ class Recipe
 {
 private:
     vector<vector<string>> recipe;
-    int row;
-    int column;
+    int rows;
+    int cols;
     string hasilRecipe;
     int jumlah;
 
 public:
     Recipe();
-    Recipe(int row, int column, string hasilRecipe, int jumlah);
+    Recipe(int rows, int cols, string hasilRecipe, int jumlah);
 
     int getRow() const;
     int getCol() const;
     vector<vector<string>> getData() const;
     string getDataElmt(int i, int j) const;
-    string gethasilRecipe() const;
+    string getHasilRecipe() const;
     int getJumlah() const;
 
-    void setElemen();
+    void setRows(int rows);
+    void setCols(int cols);
     void setElemen(int i, int j, string input);
     void setHasilRecipe(string hasilRecipe);
     void setJumlah(int jumlah);

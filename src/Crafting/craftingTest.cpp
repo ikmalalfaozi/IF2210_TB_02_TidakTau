@@ -14,9 +14,11 @@ int main() {
     Crafting craft(3,3);
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            cout << craft.getGrid().at(i).at(j).getQuantity() << endl;
+            cout << craft.getGrid().at(i).at(j).getSlotID() << endl;
         }
     }
+
+    craft.displayCraftingGrid();
 
     CraftingSlot cSlot;
     cSlot.setQuantity(5);

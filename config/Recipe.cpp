@@ -5,28 +5,28 @@ using namespace std;
 
 Recipe::Recipe() : recipe(vector<vector<string>>(0, vector<string>(0, "-")))
 {
-    this->row = 0;
-    this->column = 0;
+    this->rows = 0;
+    this->cols = 0;
     this->hasilRecipe = "-";
     this->jumlah = 0;
 }
 
-Recipe::Recipe(int row, int column, string hasilRecipe, int jumlah) : recipe(vector<vector<string>>(row, vector<string>(column, "-")))
+Recipe::Recipe(int rows, int cols, string hasilRecipe, int jumlah) : recipe(vector<vector<string>>(rows, vector<string>(cols, "-")))
 {
-    this->row = row;
-    this->column = column;
+    this->rows = rows;
+    this->cols = cols;
     this->hasilRecipe = hasilRecipe;
     this->jumlah = jumlah;
 }
 
 int Recipe::getRow() const
 {
-    return this->row;
+    return this->rows;
 }
 
 int Recipe::getCol() const
 {
-    return this->column;
+    return this->cols;
 }
 
 vector<vector<string>> Recipe::getData() const
@@ -41,7 +41,7 @@ string Recipe::getDataElmt(int i, int j) const
 }
 
 
-string Recipe::gethasilRecipe() const
+string Recipe::getHasilRecipe() const
 {
     return this->hasilRecipe;
 }
@@ -51,20 +51,17 @@ int Recipe::getJumlah() const
     return this->jumlah;
 }
 
-void Recipe::setElemen()
-{
-    for (int i = 0; i < row; i++)
-    {
-        for (int j = 0; j < column; j++)
-        {
-            cin >> recipe[i][j];
-        }
-    }
-}
-
 void Recipe::setElemen(int i, int j, string input)
 {
-    recipe[i][j] = input;
+    recipe.at(i).at(j) = input;
+}
+
+void Recipe::setRows(int rows) {
+    this->rows = rows;
+}
+
+void Recipe::setCols(int cols) {
+    this->cols = cols;
 }
 
 void Recipe::setHasilRecipe(string hasilRecipe)
@@ -79,11 +76,11 @@ void Recipe::setJumlah(int jumlah)
 
 void Recipe::printRecipe()
 {
-    for (int i = 0; i < row; i++)
+    for (int i = 0; i < this->rows; i++)
     {
-        for (int j = 0; j < column; j++)
+        for (int j = 0; j < this->cols; j++)
         {
-            cout << recipe[i][j] << "\t";
+            cout << this->recipe.at(i).at(j) << "\t";
         }
         cout << endl;
     }
