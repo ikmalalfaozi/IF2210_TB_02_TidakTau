@@ -3,8 +3,13 @@
 
 using namespace std;
 
-Recipe::Recipe() : recipe(vector<vector<string>>(0, vector<string>(0, "-")))
+Recipe::Recipe() : recipe(3, vector<string>(3, "-"))
 {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            this->recipe.at(i).at(j) = "-";
+        }
+    }
     this->rows = 0;
     this->cols = 0;
     this->hasilRecipe = "-";

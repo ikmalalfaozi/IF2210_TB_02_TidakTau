@@ -82,18 +82,18 @@ int main() {
         } 
         recipeIn.close();
 
-        Recipe* recipe = new Recipe();
-        recipe->setRows(rows);
-        recipe->setCols(cols);
-        recipe->setHasilRecipe(result);
-        recipe->setJumlah(resultCount);
+        Recipe recipe;
+        recipe.setRows(rows);
+        recipe.setCols(cols);
+        recipe.setHasilRecipe(result);
+        recipe.setJumlah(resultCount);
+        
         for (int j = 0; j < rows; j++) {
             for (int k = 0; k < cols; k++) {
-                recipe->setElemen(i, j, recipeMatrix.at(j).at(k));
+                recipe.setElemen(j, k, recipeMatrix.at(j).at(k));
             }
         }
-        recipeList.push_back(*recipe);
-        delete recipe;
+        recipeList.push_back(recipe);
     }
 
     for (it = recipeList.begin(); it != recipeList.end(); ++it) {
@@ -362,7 +362,7 @@ int main() {
         } 
         
         /* COMMAND: EXIT */
-        else if (cmd.getCommand()[0] == "Quit" || cmd.getCommand()[0] == "QUIT") {
+        else if (cmd.getCommand()[0] == "quit" || cmd.getCommand()[0] == "QUIT") {
 
         }
         
