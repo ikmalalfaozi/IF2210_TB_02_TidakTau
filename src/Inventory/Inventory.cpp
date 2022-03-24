@@ -294,7 +294,7 @@ void Inventory::useItem(string slotID){
             found = true;
             if (this->itemlist[idx].get_item()->getCategory() == "Tool"){
                 int currentDurability = this->itemlist[idx].get_item()->getDurability();
-                if (currentDurability <= 0){
+                if (currentDurability <= 1){
                     this->discardItem(slotID, 1);
                 }
                 else{
@@ -314,7 +314,62 @@ void Inventory::Craft(ItemList config, vector<Recipe> recipeList) {
     // Retrieve the correct recipe, if not found, throw "Invalid Recipe"
     Recipe result = this->crafting.getRecipe(fullRecipeList);
     if (result.getHasilRecipe() == "Dummy Recipe") {
-        throw "Invalid Recipe";
+        int toolCounter = 0;
+        bool notFound = false;
+        int x = 0;
+        int durability1, durability2;
+        int firstToolID = 0;
+        string type;
+        while (x < 3 && !notFound) {
+            int y = 0;
+            while (y < 3 && !notFound) {
+                // If there are more than 2 tools in the grid, it can't be crafter
+                if (toolCounter > 2) {
+                    notFound = true;
+                }
+                // If there are tools in the grid, add the counter
+                if (this->crafting.getElmt(x, y).getItem()->getCategory() == "Tool") {
+                    // If toolCounter = 0, find the first tool id
+                    if (toolCounter == 0) {
+                        firstToolID = this->crafting.getElmt(x, y).getItem()->getId();
+                        type = this->crafting.getElmt(x, y).getItem()->getType();
+                        durability1 = this->crafting.getElmt(x, y).getItem()->getDurability();
+                        toolCounter++;
+                    } else if ((toolCounter == 1) && (this->crafting.getElmt(x, y).getItem()->getId() == firstToolID)) {
+                        durability2 = this->crafting.getElmt(x, y).getItem()->getDurability();
+                        toolCounter++;
+                    }
+                }
+                y++;
+            }
+            x++;
+        }
+
+        // If there are 2 tools in the grid, combine them and add the durability
+        if (toolCounter == 2) {
+            int newDurability = durability1 + durability2;
+            if (newDurability > 10) {
+                newDurability = 10;
+            }
+            giveItem(new Tool(firstToolID, type, "-", newDurability), 1);
+
+            for (int x = 0; x < 3; x++) {
+                for (int y = 0; y < 3; y++) {
+                    if (this->crafting.getElmt(x, y).getItem()->getCategory() == "Tool") {
+                        CraftingSlot* newSlot = new CraftingSlot();
+                        // Clear the crafting grid
+                        NonTool* itemdefault = new NonTool(0, "-", "-");
+                        newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
+                        newSlot->setItem(itemdefault);
+                        newSlot->setQuantity(0);
+                        this->crafting.setElmt(x, y, *newSlot);
+                        delete newSlot;
+                    }
+                }
+            }
+        } else {
+            throw "Invalid Recipe";
+        }
     } else {
         bool possible = true;
         int resultQuantity = 0;
@@ -325,68 +380,101 @@ void Inventory::Craft(ItemList config, vector<Recipe> recipeList) {
 
         // While crafting is still possible (no missing items)
         while (possible) {
-            for (int x = 0; x < 3; x++) {
-                for (int y = 0; y < 3; y++) {
+            int x = 0;
+            while (x < 3 && possible) {
+                int y = 0;
+                while (y < 3 && possible) {
                     if (category == "NONTOOL") {
+                        //cout << "Recipe category Nontool" << endl;
                         if (this->crafting.getGrid().at(x).at(y).getQuantity() != 0) {
                             // Create newSlot to override current crafting slot
-                            CraftingSlot* newSlot = new CraftingSlot();
-                            newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
-                            NonTool* newItem = new NonTool(this->crafting.getElmt(x, y).getItem()->getId(), this->crafting.getElmt(x, y).getItem()->getType(), this->crafting.getElmt(x, y).getItem()->getVarian());
-                            newSlot->setItem(newItem);
-                            newSlot->setQuantity(this->crafting.getElmt(x, y).getQuantity() - 1);
-                            this->crafting.setElmt(x, y, *newSlot);
-                            
                             resultQuantity += result.getJumlah();
-                            // If the item quantity inside the grid turned to 0, then it's no longer possible to craft
-                            if (this->crafting.getGrid().at(x).at(y).getQuantity() == 0) {
-                                // Move resulting item to inventory
+                            //cout << resultQuantity << endl;
+                            for (int i = 0; i < 3; i++) {
+                                for (int j = 0; j < 3; j++) {
+                                    if (this->crafting.getGrid().at(i).at(j).getItem()->getId() != 0) {
+                                        CraftingSlot* newSlot = new CraftingSlot();
+                                        newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
+                                        NonTool* newItem = new NonTool(this->crafting.getElmt(x, y).getItem()->getId(), this->crafting.getElmt(x, y).getItem()->getType(), this->crafting.getElmt(x, y).getItem()->getVarian());
+                                        newSlot->setItem(newItem);
+                                        newSlot->setQuantity(this->crafting.getElmt(i, j).getQuantity() - 1);
+                                        this->crafting.setElmt(i, j, *newSlot);
+
+                                        if (this->crafting.getGrid().at(i).at(j).getQuantity() == 0) {
+                                            
+                                            // Move resulting item to inventory
+
+                                            // Clear the crafting grid
+                                            NonTool* itemdefault = new NonTool(0, "-", "-");
+                                            newSlot->setSlotID(this->crafting.getElmt(i, j).getSlotID());
+                                            newSlot->setItem(itemdefault);
+                                            newSlot->setQuantity(0);
+                                            this->crafting.setElmt(i, j, *newSlot);
+                                            delete newSlot;
+
+                                            // Set possible to false to break the loop
+                                            possible = false;
+                                            
+                                            
+                                            //cout << "quantity:" << resultQuantity << endl;
+                                        }
+
+                                        
+                                    }
+                                }
+                            }
+
+                            if (!possible) {
                                 NonTool* resultItem = new NonTool(id, resultName, varian);
                                 giveItem(resultItem, resultQuantity);
-
-                                // Clear the crafting grid
-                                NonTool* itemdefault = new NonTool(0, "-", "-");
-                                newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
-                                newSlot->setItem(itemdefault);
-                                newSlot->setQuantity(0);
-                                this->crafting.setElmt(x, y, *newSlot);
-                                delete newSlot;
-
-                                // Set possible to false to break the loop
-                                possible = false;
-                            } 
+                            }
                         } 
+                           
                     } else if (category == "TOOL") {
+                        cout << "Recipe category Tool" << endl;
                         if (this->crafting.getGrid().at(x).at(y).getQuantity() != 0) {
                             // Create newSlot to override current crafting slot
-                            CraftingSlot* newSlot = new CraftingSlot();
-                            newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
-                            Tool* newItem = new Tool(this->crafting.getElmt(x, y).getItem()->getId(), this->crafting.getElmt(x, y).getItem()->getType(), this->crafting.getElmt(x, y).getItem()->getVarian(), 10);
-                            newSlot->setItem(newItem);
-                            newSlot->setQuantity(this->crafting.getElmt(x, y).getQuantity() - 1);
-                            this->crafting.setElmt(x, y, *newSlot);
-                            
                             resultQuantity += result.getJumlah();
-                            // If the item quantity inside the grid turned to 0, then it's no longer possible to craft
-                            if (this->crafting.getGrid().at(x).at(y).getQuantity() == 0) {
-                                // Move resulting item to inventory
+                            cout << resultQuantity << endl;
+                            for (int i = 0; i < 3; i++) {
+                                for (int j = 0; j < 3; j++) {
+                                    if (this->crafting.getGrid().at(i).at(j).getItem()->getId() != 0) {
+                                        CraftingSlot* newSlot = new CraftingSlot();
+                                        newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
+                                        Tool* newItem = new Tool(this->crafting.getElmt(x, y).getItem()->getId(), this->crafting.getElmt(x, y).getItem()->getType(), this->crafting.getElmt(x, y).getItem()->getVarian(), 10);
+                                        newSlot->setItem(newItem);
+                                        newSlot->setQuantity(this->crafting.getElmt(i, j).getQuantity() - 1);
+                                        this->crafting.setElmt(i, j, *newSlot);
+
+                                        if (this->crafting.getGrid().at(i).at(j).getQuantity() == 0) {
+                                            // Move resulting item to inventory
+
+                                            // Clear the crafting grid
+                                            NonTool* itemdefault = new NonTool(0, "-", "-");
+                                            newSlot->setSlotID(this->crafting.getElmt(i, j).getSlotID());
+                                            newSlot->setItem(itemdefault);
+                                            newSlot->setQuantity(0);
+                                            this->crafting.setElmt(i, j, *newSlot);
+                                            delete newSlot;
+
+                                            // Set possible to false to break the loop
+                                            possible = false;
+                                        }
+
+                                        
+                                    }
+                                }
+                            }
+                            if (!possible) {
                                 Tool* resultItem = new Tool(id, resultName, varian, 10);
                                 giveItem(resultItem, resultQuantity);
+                            }
 
-                                // Clear the crafting grid
-                                NonTool* itemdefault = new NonTool(0, "-", "-");
-                                newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
-                                newSlot->setItem(itemdefault);
-                                newSlot->setQuantity(0);
-                                this->crafting.setElmt(x, y, *newSlot);
-                                delete newSlot;
-
-                                // Set possible to false to break the loop
-                                possible = false;
-                            } 
                         } 
-                    } 
+                    }
+                    y++; 
                 }
+                x++;
             }
         }
     }

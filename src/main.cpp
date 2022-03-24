@@ -7,7 +7,6 @@
 #include <iostream>
 #include <string>
 #include <dirent.h>
-#include <filesystem>
 #include "../config/ItemList.hpp"
 #include "./Command/Command.hpp"
 #include "./Crafting/crafting.hpp"
@@ -119,7 +118,7 @@ int main() {
                 if (cmd.getCommand()[1] == "OAK_LOG"){
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new NonTool(1, "LOG", "OAK_lOG"), count);
+                        inventory->giveItem(new NonTool(1, "LOG", "OAK_LOG"), count);
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
@@ -140,7 +139,7 @@ int main() {
                 } else if (cmd.getCommand()[1] == "OAK_PLANK") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new NonTool(4, "LOG", "OAK_LOG"), count);
+                        inventory->giveItem(new NonTool(4, "PLANK", "OAK_PLANK"), count);
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
@@ -203,84 +202,109 @@ int main() {
                 } else if (cmd.getCommand()[1] == "WOODEN_PICKAXE") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new Tool(13, "WOODEN_PICKAXE", "-", 10), count);
+                        for(int i = 0; i < count; i++) {
+                            inventory->giveItem(new Tool(13, "WOODEN_PICKAXE", "-", 10), 1);
+                        }
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
                 } else if (cmd.getCommand()[1] == "STONE_PICKAXE") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new Tool(14, "STONE_PICKAXE", "-", 10), count);
+                        for(int i = 0; i < count; i++) {
+                            inventory->giveItem(new Tool(14, "STONE_PICKAXE", "-", 10), 1);
+
+                        }
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
                 } else if (cmd.getCommand()[1] == "IRON_PICKAXE") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new Tool(15, "IRON_PICKAXE", "-", 10), count);
+                        for(int i = 0; i < count; i++) {
+                            inventory->giveItem(new Tool(15, "IRON_PICKAXE", "-", 10), 1);
+                        }
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
                 } else if (cmd.getCommand()[1] == "DIAMOND_PICKAXE") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new Tool(16, "DIAMOND_PICKAXE", "-", 10), count);
+                        for(int i = 0; i < count; i++) {
+                            inventory->giveItem(new Tool(16, "DIAMOND_PICKAXE", "-", 10), 1);
+                        }
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
                 } else if (cmd.getCommand()[1] == "WOODEN_AXE") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new Tool(17, "WOODEN_AXE", "-", 10), count);
+                        for(int i = 0; i < count; i++) {
+                            inventory->giveItem(new Tool(17, "WOODEN_AXE", "-", 10), 1);
+                        }
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
                 } else if (cmd.getCommand()[1] == "STONE_AXE") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new Tool(18, "Stone_Axe", "-", 10), count);
+                        for(int i = 0; i < count; i++) {
+                            inventory->giveItem(new Tool(18, "STONE_AXE", "-", 10), 1);
+                        }
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
                 } else if (cmd.getCommand()[1] == "IRON_AXE") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new Tool(19, "IRON_AXE", "-", 10), count);
+                        for(int i = 0; i < count; i++) {
+                            inventory->giveItem(new Tool(19, "IRON_AXE", "-", 10), 1);
+                        }
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
                 } else if (cmd.getCommand()[1] == "DIAMOND_AXE") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new Tool(20, "DIAMOND_AXE", "-", 10), count);
+                        for(int i = 0; i < count; i++) {
+                            inventory->giveItem(new Tool(20, "DIAMOND_AXE", "-", 10), 1);
+                        }
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
                 } else if (cmd.getCommand()[1] == "WOODEN_SWORD") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new Tool(21, "WOODEN_SWORD", "-", 10), count);
+                        for(int i = 0; i < count; i++) {
+                            inventory->giveItem(new Tool(21, "WOODEN_SWORD", "-", 10), 1);
+                        }
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
                 } else if (cmd.getCommand()[1] == "STONE_SWORD") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new Tool(22, "STONE_SWORD", "-", 10), count);
+                        for(int i = 0; i < count; i++) {
+                            inventory->giveItem(new Tool(22, "STONE_SWORD", "-", 10), 1);
+                        }
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
                 } else if (cmd.getCommand()[1] == "IRON_SWORD") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new Tool(23, "IRON_SWORD", "-", 10), count);
+                        for(int i = 0; i < count; i++) {
+                            inventory->giveItem(new Tool(23, "IRON_SWORD", "-", 10), 1);
+                        }
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
                 } else if (cmd.getCommand()[1] == "DIAMOND_SWORD") {
                     try {
                         int count = stoi(cmd.getCommand()[2]);
-                        inventory->giveItem(new Tool(24, "DIAMOND_SWORD", "-", 10), count);
+                        for(int i = 0; i < count; i++) {
+                            inventory->giveItem(new Tool(24, "DIAMOND_SWORD", "-", 10), 1);
+                        }
                     } catch (exception& e) {
                         cout << "Jumlah item harus bertipe integer" << endl;
                     }
@@ -344,7 +368,11 @@ int main() {
         
         /* COMMAND: CRAFT */
         else if (cmd.getCommand()[0] == "CRAFT") {
-
+            try {
+                inventory->Craft(*itemList, recipeList);
+            } catch (const char* msg) {
+                cout << msg << endl;
+            }
         }
         
         /* COMMAND: EXPORT */

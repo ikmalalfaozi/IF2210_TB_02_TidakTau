@@ -45,7 +45,11 @@ void Crafting::displayCraftingGrid() {
     for (it = this->grid.begin(); it != this->grid.end(); ++it) {
         cout << "\t\t\t";
         for (it2 = it->begin(); it2 != it->end(); ++it2) {
-            cout << "[" << it2->getItem()->getId() << ":" << it2->getQuantity() << "]\t";
+            if (it2->getItem()->getCategory() == "NonTool") {
+                cout << "[" << it2->getItem()->getId() << ":" << it2->getQuantity() << "]\t";
+            } else {
+                cout << "[" << it2->getItem()->getId() << ":" << it2->getItem()->getDurability() << "]\t";
+            }
         }
         cout << endl;
     }
@@ -55,16 +59,12 @@ void Crafting::displayCraftingGrid() {
 bool Crafting::testRecipe(Recipe recipe) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            if (getElmt(i, j).getItem()->getVarian() == "-") {
-                if (recipe.getDataElmt(i, j) != getElmt(i, j).getItem()->getType()) {
-                    return false;
-                }
-            } else {
-                if (recipe.getDataElmt(i, j) != getElmt(i, j).getItem()->getVarian()) {
-                    return false;
-                }
+            //cout << recipe.getDataElmt(i, j) << endl;
+            //cout << getElmt(i, j).getItem()->getType() << endl;
+            //cout << getElmt(i, j).getItem()->getVarian() << endl << endl;
+            if (recipe.getDataElmt(i, j) != getElmt(i, j).getItem()->getType() && recipe.getDataElmt(i, j) != getElmt(i, j).getItem()->getVarian()) {
+                return false;
             }
-            
         }
     }
     
@@ -74,17 +74,18 @@ bool Crafting::testRecipe(Recipe recipe) {
 // Get the recipe information
 Recipe Crafting::getRecipe(vector<Recipe> recipeList) {
     vector<Recipe>::iterator it;
-    Recipe dummyRecipe(3, 3, "Dummy Recipe", 0);
+    Recipe* dummyRecipe = new Recipe(3, 3, "Dummy Recipe", 0);
     bool found = false;
 
     for (it = recipeList.begin(); it != recipeList.end(); ++it) {
+        //it->printRecipe();
         if (testRecipe(*it)) {
             found = true;
             return (*it);
         }
     }
 
-    return dummyRecipe;
+    return *dummyRecipe;
 }
 
 // Create an empty 3x3 recipe matrix
