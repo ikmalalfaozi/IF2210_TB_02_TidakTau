@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 #include "craftingSlot.hpp"
-// #include "../Inventory/Inventory.hpp"
 #include "../Item/Item.hpp"
 #include "../../config/recipe.hpp"
 #include "../../config/ItemList.hpp"
