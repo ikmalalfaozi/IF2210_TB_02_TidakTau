@@ -29,6 +29,7 @@ public:
     void moveInventoryToCrafting(string slotIDsrc, string slotIDdest); // Memindahkan item dri inventory ke craft
     void moveCraftingToInventory(string slotIDsrc, string slotIDdest);
     void useItem(string slotID); // Menggunakan item
+    void Craft(ItemList config, vector<Recipe> recipeList);
     
     void showInventory(); // Mencetak inventory
     void exportInventory(string filename); // Meng-export inventory

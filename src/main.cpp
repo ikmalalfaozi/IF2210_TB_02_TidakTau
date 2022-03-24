@@ -95,10 +95,6 @@ int main() {
         }
         recipeList.push_back(recipe);
     }
-
-    for (it = recipeList.begin(); it != recipeList.end(); ++it) {
-        it->printRecipe();
-    }
     
     do {
         /* SCAN COMMAND */

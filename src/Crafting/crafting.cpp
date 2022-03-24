@@ -52,16 +52,13 @@ void Crafting::displayCraftingGrid() {
 }
 
 // Test if items in the grid is the same with the recipe
-bool Crafting::testRecipe(vector<Recipe> recipeList) {
-    vector<Recipe>::iterator it;
-
-    for (it = recipeList.begin(); it != recipeList.end(); ++it) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                // INI HARUS NYAMAIN DATA RECIPE SAMA DATA CRAFTING SLOTS
-                if ((*it).getDataElmt(i, j) != getElmt(i, j).getItem()->getType()) {
-                    return false;
-                }
+bool Crafting::testRecipe(Recipe recipe) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << recipe.getDataElmt(i, j) << endl;
+            cout << getElmt(i, j).getItem()->getVarian() << endl;
+            if (recipe.getDataElmt(i, j) != getElmt(i, j).getItem()->getVarian()) {
+                return false;
             }
         }
     }
@@ -72,11 +69,11 @@ bool Crafting::testRecipe(vector<Recipe> recipeList) {
 // Get the recipe information
 Recipe Crafting::getRecipe(vector<Recipe> recipeList) {
     vector<Recipe>::iterator it;
-    Recipe dummyRecipe;
+    Recipe dummyRecipe(3, 3, "Dummy Recipe", 0);
     bool found = false;
 
     for (it = recipeList.begin(); it != recipeList.end(); ++it) {
-        if (testRecipe(recipeList)) {
+        if (testRecipe(*it)) {
             found = true;
             return (*it);
         }
@@ -86,14 +83,12 @@ Recipe Crafting::getRecipe(vector<Recipe> recipeList) {
 }
 
 // Create an empty 3x3 recipe matrix
-Recipe Crafting::createEmptyRecipe() {
-    Recipe newRecipe;
+void Crafting::createEmptyRecipe(Recipe& recipe) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            newRecipe.setElemen(i, j, "-");
+            recipe.setElemen(i, j, "-");
         }
     }
-    return newRecipe;
 }
 
 // Input new recipes
@@ -134,7 +129,6 @@ int Crafting::findMirrorPossibilities(Recipe recipe) {
         return 1;
     }
 
-    
     return -1;
 }
 
@@ -144,12 +138,12 @@ vector<Recipe> Crafting::createMirroredRecipe(Recipe recipe) {
     vector<Recipe> dummyRecipe;
     // Possibility = 2, recipe is 3x2
     if (possibilities == 2) {
+        int x;
         vector<Recipe> mirroredList;
-        Recipe emptyRecipe(recipe.getRow(), recipe.getCol(), recipe.getHasilRecipe(), recipe.getJumlah());
+        Recipe* emptyRecipe = new Recipe(3, 3, recipe.getHasilRecipe(), recipe.getJumlah());
 
         // Get recipe elements
         vector<string> recipeElmt;
-        vector<string>::iterator it;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 2; j++) {
                 recipeElmt.push_back(recipe.getDataElmt(i, j));
@@ -157,38 +151,34 @@ vector<Recipe> Crafting::createMirroredRecipe(Recipe recipe) {
         }
 
         // Create left oriented recipe
-        emptyRecipe = createEmptyRecipe();
+        createEmptyRecipe(*emptyRecipe);
+        x = 0;
         for (int i = 0; i < 3; i++) {
-            it = recipeElmt.begin();
             for (int j = 0; j < 2; j++) {
-                if (it != recipeElmt.end()) {
-                    emptyRecipe.setElemen(i, j, *it);
-                    ++it;
-                }
+                emptyRecipe->setElemen(i, j, recipeElmt.at(x));
+                x++;
             }
         }
-        mirroredList.push_back(emptyRecipe);
+        mirroredList.push_back(*emptyRecipe);
 
         // Create right oriented recipe
-        emptyRecipe = createEmptyRecipe();
+        createEmptyRecipe(*emptyRecipe);
+        x = 0;
         for (int i = 0; i < 3; i++) {
-            it = recipeElmt.begin();
-            for (int j = 2; j  <= 0; j--) {
-                if (it != recipeElmt.end()) {
-                    emptyRecipe.setElemen(i, j, *it);
-                    ++it;
-                }
+            for (int j = 2; j > 0; j--) {
+                emptyRecipe->setElemen(i, j, recipeElmt.at(x));
+                x++;
             }
         }
-        mirroredList.push_back(emptyRecipe);
-
+        mirroredList.push_back(*emptyRecipe);
+        delete emptyRecipe;
         return mirroredList;
     }
 
     // Possibility = 3, recipe is 3x1
     if (possibilities == 3) {
         vector<Recipe> mirroredList;
-        Recipe emptyRecipe(recipe.getRow(), recipe.getCol(), recipe.getHasilRecipe(), recipe.getJumlah());
+        Recipe* emptyRecipe = new Recipe(3, 3, recipe.getHasilRecipe(), recipe.getJumlah());
 
         // Get recipe elements
         vector<string> recipeElmt;
@@ -200,57 +190,60 @@ vector<Recipe> Crafting::createMirroredRecipe(Recipe recipe) {
         // Iterate 3 times because there are 3 recipes
         for (int i = 0; i < 3; i++) {
             it = recipeElmt.begin();
-            emptyRecipe = createEmptyRecipe();
+            createEmptyRecipe(*emptyRecipe);
+            int x = 0;
             for (int j = 0; j < 3; j++) {
                 if (it != recipeElmt.end()) {
-                    emptyRecipe.setElemen(j, i, *it);
+                    emptyRecipe->setElemen(j, i, recipeElmt.at(x));
+                    x++;
                 }
             }
-            mirroredList.push_back(emptyRecipe);
+            mirroredList.push_back(*emptyRecipe);
         }
-
+        delete emptyRecipe;
         return mirroredList;
     }
 
     // Possibility = 6, recipe is 2x1
     if (possibilities == 6) {
         vector<Recipe> mirroredList;
-        Recipe emptyRecipe(recipe.getRow(), recipe.getCol(), recipe.getHasilRecipe(), recipe.getJumlah());
+        Recipe* emptyRecipe = new Recipe(3, 3, recipe.getHasilRecipe(), recipe.getJumlah());
 
         // Create recipe for the top half
         for (int i = 0; i < 3; i++) {
-            emptyRecipe = createEmptyRecipe();
+            createEmptyRecipe(*emptyRecipe);
             for (int j = 0; j < 2; j++) {
-                emptyRecipe.setElemen(j, i, recipe.getDataElmt(j, 0));
+                emptyRecipe->setElemen(j, i, recipe.getDataElmt(j, 0));
             }
-            mirroredList.push_back(emptyRecipe);
+            mirroredList.push_back(*emptyRecipe);
         }
         
         // Create recipe for the bottom half
         for (int i = 0; i < 3; i++) {
-            emptyRecipe = createEmptyRecipe();
+            createEmptyRecipe(*emptyRecipe);
             int k = 0;
-            for (int j = 0; j < 2; j++) {
-                emptyRecipe.setElemen(j, i, recipe.getDataElmt(k, 0));
+            for (int j = 1; j < 3; j++) {
+                emptyRecipe->setElemen(j, i, recipe.getDataElmt(k, 0));
                 k++;
             }
-            mirroredList.push_back(emptyRecipe);
+            mirroredList.push_back(*emptyRecipe);
         }
+        delete emptyRecipe;
         return mirroredList;
     }
 
     // Possibility = 9, recipe is 1x1
     if (possibilities == 9) {
         vector<Recipe> mirroredList;
-        Recipe emptyRecipe(recipe.getRow(), recipe.getCol(), recipe.getHasilRecipe(), recipe.getJumlah());
-
+        Recipe* emptyRecipe = new Recipe(3, 3, recipe.getHasilRecipe(), recipe.getJumlah());
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                emptyRecipe = createEmptyRecipe();
-                emptyRecipe.setElemen(j, i, recipe.getDataElmt(0, 0));
-                mirroredList.push_back(emptyRecipe);
+                createEmptyRecipe(*emptyRecipe);
+                emptyRecipe->setElemen(j, i, recipe.getDataElmt(0, 0));
+                mirroredList.push_back(*emptyRecipe);
             }
         }
+        delete emptyRecipe;
         return mirroredList;
     }
 
@@ -274,13 +267,17 @@ vector<Recipe> Crafting::createFullRecipeList(vector<Recipe> originalList) {
     // Iterate for the other recipes
     for (it = originalList.begin(); it != originalList.end(); ++it) {
         if (it->getRow() == 3 && it->getCol() == 2) {
+            //cout << "3x2 recipe"<< endl;
             mirrorRecipeList = createMirroredRecipe(*it);
             for (it2 = mirrorRecipeList.begin(); it2 != mirrorRecipeList.end(); ++it2) {
+                //cout << "3x2 recipes list" << endl;
+                //it2->printRecipe();
                 recipeList.push_back(*it2);
             }
         }
 
         if (it->getRow() == 3 && it->getCol() == 1) {
+            //cout << "3x1 recipe"<< endl;
             mirrorRecipeList = createMirroredRecipe(*it);
             for (it2 = mirrorRecipeList.begin(); it2 != mirrorRecipeList.end(); ++it2) {
                 recipeList.push_back(*it2);
@@ -288,6 +285,7 @@ vector<Recipe> Crafting::createFullRecipeList(vector<Recipe> originalList) {
         }
 
         if (it->getRow() == 2 && it->getCol() == 1) {
+            //cout << "2x1 recipe"<< endl;
             mirrorRecipeList = createMirroredRecipe(*it);
             for (it2 = mirrorRecipeList.begin(); it2 != mirrorRecipeList.end(); ++it2) {
                 recipeList.push_back(*it2);
@@ -295,6 +293,7 @@ vector<Recipe> Crafting::createFullRecipeList(vector<Recipe> originalList) {
         }
 
         if (it->getRow() == 1 && it->getCol() == 1) {
+            //cout << "1x1 recipe"<< endl;
             mirrorRecipeList = createMirroredRecipe(*it);
             for (it2 = mirrorRecipeList.begin(); it2 != mirrorRecipeList.end(); ++it2) {
                 recipeList.push_back(*it2);
@@ -304,52 +303,3 @@ vector<Recipe> Crafting::createFullRecipeList(vector<Recipe> originalList) {
 
     return recipeList;
 }
-
-/*
-void Crafting::Craft(ItemList config, Inventory& inventory, vector<Recipe> recipeList) {
-    recipeList = createFullRecipeList(recipeList);
-    // If the recipe is corrent, craft the item
-    if (testRecipe(recipeList)) {
-        Recipe result = getRecipe(recipeList);
-        bool possible = true;
-        int resultQuantity = 0;
-        string resultName = result.gethasilRecipe();
-        while (possible) {
-            for (int x = 0; x < 3; x++) {
-                for (int y = 0; y < 3; y++) {
-                    vector<CraftingSlot> gridRow = this->grid.at(x);
-                    // If there's an item inside the grid, then decrease the amount
-                    if (gridRow.at(y).getQuantity() != 0) {
-                        // If the item quantity inside the grid is 0, then it's no longer possible to craft
-                        if (gridRow.at(y).getQuantity() == 0) {
-                            possible = false;
-                        } else {
-                            resultQuantity += result.getJumlah();
-                            gridRow.at(y).setQuantity(gridRow.at(y).getQuantity() - 1);
-                        }
-                    }
-                }
-            }
-        }
-        int id = config.getConfigList()[resultName].getId();
-        string varian = config.getConfigList()[resultName].getVarian();
-        string category = config.getConfigList()[resultName].getCategory();
-        if (category == "TOOL") {
-            Tool* resultTool = new Tool(id, resultName, varian, 10);
-        } else if (category == "NONTOOL") {
-            NonTool* resultNonTool = new NonTool(id, resultName, varian);
-        }
-
-    } else {
-        throw "Invalid Recipe";
-    }
-} */
-
-/*
-void Crafting::moveCraftingToInventory(string slotIDsrc, string slotIDdest) {
-
-}
-
-void Crafting::moveResulttoInventory(Inventory& inventory, Item* item, int resultQuantity) {
-    inventory.giveItem(item, resultQuantity);
-} */

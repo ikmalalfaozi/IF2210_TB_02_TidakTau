@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include "craftingSlot.hpp"
 #include "../Item/Item.hpp"
 #include "../../config/recipe.hpp"
@@ -30,13 +31,13 @@ class Crafting {
         void displayCraftingGrid();
 
         // Test if items in the grid is the same with the recipe
-        bool testRecipe(vector<Recipe> recipeList);
+        bool testRecipe(Recipe recipe);
 
         // Get the recipe information
         Recipe getRecipe(vector<Recipe> recipeList);
 
         // Create an empty recipe matrix
-        Recipe createEmptyRecipe();
+        void createEmptyRecipe(Recipe& recipe);
 
         // Input new recipes
         Recipe inputNewRecipe(Recipe recipe);
@@ -50,9 +51,6 @@ class Crafting {
         // Create full recipe list
         vector<Recipe> createFullRecipeList(vector<Recipe> originalList);
         //void Craft(ItemList config, Inventory& inventory, vector<Recipe> recipeList);
-
-        void moveCraftingToInventory(string slotIDsrc, string slotIDdest);
-        //void moveResulttoInventory(Inventory& inventory, Item* item, int resultQuantity);
 };
 
 #endif

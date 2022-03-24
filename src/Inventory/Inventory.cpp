@@ -306,6 +306,92 @@ void Inventory::useItem(string slotID){
     }
 }
 
+void Inventory::Craft(ItemList config, vector<Recipe> recipeList) {
+    vector<Recipe> fullRecipeList;
+    fullRecipeList = this->crafting.createFullRecipeList(recipeList);
+    vector<Recipe>::iterator it;
+    
+    // Retrieve the correct recipe, if not found, throw "Invalid Recipe"
+    Recipe result = this->crafting.getRecipe(fullRecipeList);
+    if (result.getHasilRecipe() == "Dummy Recipe") {
+        throw "Invalid Recipe";
+    } else {
+        bool possible = true;
+        int resultQuantity = 0;
+        string resultName = result.getHasilRecipe();
+        int id = config.getItemElmt(resultName).getId();
+        string varian = config.getItemElmt(resultName).getVarian();
+        string category = config.getItemElmt(resultName).getCategory();
+
+        // While crafting is still possible (no missing items)
+        while (possible) {
+            for (int x = 0; x < 3; x++) {
+                for (int y = 0; y < 3; y++) {
+                    if (category == "NONTOOL") {
+                        if (this->crafting.getGrid().at(x).at(y).getQuantity() != 0) {
+                            // Create newSlot to override current crafting slot
+                            CraftingSlot* newSlot = new CraftingSlot();
+                            newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
+                            NonTool* newItem = new NonTool(this->crafting.getElmt(x, y).getItem()->getId(), this->crafting.getElmt(x, y).getItem()->getType(), this->crafting.getElmt(x, y).getItem()->getVarian());
+                            newSlot->setItem(newItem);
+                            newSlot->setQuantity(this->crafting.getElmt(x, y).getQuantity() - 1);
+                            this->crafting.setElmt(x, y, *newSlot);
+                            
+                            resultQuantity += result.getJumlah();
+                            // If the item quantity inside the grid turned to 0, then it's no longer possible to craft
+                            if (this->crafting.getGrid().at(x).at(y).getQuantity() == 0) {
+                                // Move resulting item to inventory
+                                NonTool* resultItem = new NonTool(id, resultName, varian);
+                                giveItem(resultItem, resultQuantity);
+
+                                // Clear the crafting grid
+                                NonTool* itemdefault = new NonTool(0, "-", "-");
+                                newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
+                                newSlot->setItem(itemdefault);
+                                newSlot->setQuantity(0);
+                                this->crafting.setElmt(x, y, *newSlot);
+                                delete newSlot;
+
+                                // Set possible to false to break the loop
+                                possible = false;
+                            } 
+                        } 
+                    } else if (category == "TOOL") {
+                        if (this->crafting.getGrid().at(x).at(y).getQuantity() != 0) {
+                            // Create newSlot to override current crafting slot
+                            CraftingSlot* newSlot = new CraftingSlot();
+                            newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
+                            Tool* newItem = new Tool(this->crafting.getElmt(x, y).getItem()->getId(), this->crafting.getElmt(x, y).getItem()->getType(), this->crafting.getElmt(x, y).getItem()->getVarian(), 10);
+                            newSlot->setItem(newItem);
+                            newSlot->setQuantity(this->crafting.getElmt(x, y).getQuantity() - 1);
+                            this->crafting.setElmt(x, y, *newSlot);
+                            
+                            resultQuantity += result.getJumlah();
+                            // If the item quantity inside the grid turned to 0, then it's no longer possible to craft
+                            if (this->crafting.getGrid().at(x).at(y).getQuantity() == 0) {
+                                // Move resulting item to inventory
+                                Tool* resultItem = new Tool(id, resultName, varian, 10);
+                                giveItem(resultItem, resultQuantity);
+
+                                // Clear the crafting grid
+                                NonTool* itemdefault = new NonTool(0, "-", "-");
+                                newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
+                                newSlot->setItem(itemdefault);
+                                newSlot->setQuantity(0);
+                                this->crafting.setElmt(x, y, *newSlot);
+                                delete newSlot;
+
+                                // Set possible to false to break the loop
+                                possible = false;
+                            } 
+                        } 
+                    } 
+                }
+            }
+        }
+    }
+}
+
 void Inventory::showInventory()
 {
     // Print Crafting Slots
