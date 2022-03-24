@@ -55,11 +55,16 @@ void Crafting::displayCraftingGrid() {
 bool Crafting::testRecipe(Recipe recipe) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            cout << recipe.getDataElmt(i, j) << endl;
-            cout << getElmt(i, j).getItem()->getVarian() << endl;
-            if (recipe.getDataElmt(i, j) != getElmt(i, j).getItem()->getVarian()) {
-                return false;
+            if (getElmt(i, j).getItem()->getVarian() == "-") {
+                if (recipe.getDataElmt(i, j) != getElmt(i, j).getItem()->getType()) {
+                    return false;
+                }
+            } else {
+                if (recipe.getDataElmt(i, j) != getElmt(i, j).getItem()->getVarian()) {
+                    return false;
+                }
             }
+            
         }
     }
     
