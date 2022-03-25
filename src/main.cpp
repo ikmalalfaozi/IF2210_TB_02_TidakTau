@@ -95,6 +95,8 @@ int main() {
         recipeList.push_back(recipe);
     }
     
+    cout << "|------------INVENTORY MOBILITA------------|" << endl;
+    cout << "Mahasiswa ITB cabang Shinjuku" << endl;
     do {
         /* SCAN COMMAND */
         cout << "Masukkan Command: ";
@@ -106,11 +108,12 @@ int main() {
         /* COMMAND: SHOW */
         if (cmd.getCommand()[0] == "SHOW") {
             if (cmd.getSize() == 1) {
-              inventory->showInventory();
+                cout << endl;
+                inventory->showInventory();
             } else {
-              cout << "Command Salah" << endl;
+                cout << "Command Salah" << endl;
             }
-        } 
+        }
         
         /* COMMAND: GIVE */
         else if (cmd.getCommand()[0] == "GIVE") {
@@ -395,6 +398,7 @@ int main() {
             cout << "Command Tidak Ada" << endl;
         }
     } while (cmd.getCommand()[0] != "QUIT" && cmd.getCommand()[0] != "quit");
+
     /* COMMAND QUIT */
 
     // // sample interaction
@@ -425,5 +429,6 @@ int main() {
     //         cout << "Invalid command" << endl;
     //     }
     // }
+    cout << "Sayonara........." << endl;
     return 0;
 }
