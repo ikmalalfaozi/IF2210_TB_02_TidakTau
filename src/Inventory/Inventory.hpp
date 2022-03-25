@@ -10,8 +10,6 @@
 #include "../Crafting/crafting.hpp"
 #include "InventorySlot.hpp"
 
-// BELUM SELESAI
-
 class Inventory {
 private:
     Crafting crafting;
@@ -26,10 +24,10 @@ public:
     void giveItem(Item* item, int quantity);// Menambah item ke inventory
     void discardItem(string slotID, int quantity); // Membuang item dari inventory
     void moveStackItem(string slotIDsrc, string slotIDdest); // Menumpuk item non tool yang sama pada inventory
-    void moveInventoryToCrafting(string slotIDsrc, string slotIDdest); // Memindahkan item dri inventory ke craft
-    void moveCraftingToInventory(string slotIDsrc, string slotIDdest);
+    void moveInventoryToCrafting(string slotIDsrc, string slotIDdest); // Memindahkan item dri inventory ke crafting
+    void moveCraftingToInventory(string slotIDsrc, string slotIDdest); // Memindahkan item dari crafting ke inventory
     void useItem(string slotID); // Menggunakan item
-    void Craft(ItemList config, vector<Recipe> recipeList);
+    void Craft(ItemList config, vector<Recipe> recipeList); // Melakukan craft item pada Crafting
     
     void showInventory(); // Mencetak inventory
     void exportInventory(string filename); // Meng-export inventory
