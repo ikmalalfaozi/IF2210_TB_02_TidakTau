@@ -374,6 +374,7 @@ void Inventory::Craft(ItemList config, vector<Recipe> recipeList) {
         bool possible = true;
         int resultQuantity = 0;
         string resultName = result.getHasilRecipe();
+        // Get item data from its name
         int id = config.getItemElmt(resultName).getId();
         string varian = config.getItemElmt(resultName).getVarian();
         string category = config.getItemElmt(resultName).getCategory();
@@ -385,25 +386,26 @@ void Inventory::Craft(ItemList config, vector<Recipe> recipeList) {
                 int y = 0;
                 while (y < 3 && possible) {
                     if (category == "NONTOOL") {
-                        //cout << "Recipe category Nontool" << endl;
                         if (this->crafting.getGrid().at(x).at(y).getQuantity() != 0) {
-                            // Create newSlot to override current crafting slot
+                            // Increase result quantity (for multicrafting purposes)
                             resultQuantity += result.getJumlah();
-                            //cout << resultQuantity << endl;
+
+                            // Loop to reduce the quantity of items inside the grid by 1
                             for (int i = 0; i < 3; i++) {
                                 for (int j = 0; j < 3; j++) {
+                                    // Search for an item within the grid
                                     if (this->crafting.getGrid().at(i).at(j).getItem()->getId() != 0) {
+                                        // Create newSlot to override current crafting slot
                                         CraftingSlot* newSlot = new CraftingSlot();
                                         newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
                                         NonTool* newItem = new NonTool(this->crafting.getElmt(x, y).getItem()->getId(), this->crafting.getElmt(x, y).getItem()->getType(), this->crafting.getElmt(x, y).getItem()->getVarian());
                                         newSlot->setItem(newItem);
+                                        // Reduce the quantity by 1
                                         newSlot->setQuantity(this->crafting.getElmt(i, j).getQuantity() - 1);
                                         this->crafting.setElmt(i, j, *newSlot);
 
+                                        // If an item within the grid reaches 0 quantity, delete it
                                         if (this->crafting.getGrid().at(i).at(j).getQuantity() == 0) {
-                                            
-                                            // Move resulting item to inventory
-
                                             // Clear the crafting grid
                                             NonTool* itemdefault = new NonTool(0, "-", "-");
                                             newSlot->setSlotID(this->crafting.getElmt(i, j).getSlotID());
@@ -414,16 +416,12 @@ void Inventory::Craft(ItemList config, vector<Recipe> recipeList) {
 
                                             // Set possible to false to break the loop
                                             possible = false;
-                                            
-                                            
-                                            //cout << "quantity:" << resultQuantity << endl;
-                                        }
-
-                                        
+                                        } 
                                     }
                                 }
                             }
 
+                            // Move resulting item to inventory
                             if (!possible) {
                                 NonTool* resultItem = new NonTool(id, resultName, varian);
                                 giveItem(resultItem, resultQuantity);
@@ -433,22 +431,25 @@ void Inventory::Craft(ItemList config, vector<Recipe> recipeList) {
                     } else if (category == "TOOL") {
                         cout << "Recipe category Tool" << endl;
                         if (this->crafting.getGrid().at(x).at(y).getQuantity() != 0) {
-                            // Create newSlot to override current crafting slot
+                            // Increase result quantity (for multicrafting purposes)
                             resultQuantity += result.getJumlah();
-                            cout << resultQuantity << endl;
+
+                            // Loop to reduce the quantity of items inside the grid by 1
                             for (int i = 0; i < 3; i++) {
                                 for (int j = 0; j < 3; j++) {
+                                    // Search for an item within the grid
                                     if (this->crafting.getGrid().at(i).at(j).getItem()->getId() != 0) {
+                                        // Create newSlot to override current crafting slot
                                         CraftingSlot* newSlot = new CraftingSlot();
                                         newSlot->setSlotID(this->crafting.getElmt(x, y).getSlotID());
                                         Tool* newItem = new Tool(this->crafting.getElmt(x, y).getItem()->getId(), this->crafting.getElmt(x, y).getItem()->getType(), this->crafting.getElmt(x, y).getItem()->getVarian(), 10);
                                         newSlot->setItem(newItem);
+                                        // Reduce the quantity by 1
                                         newSlot->setQuantity(this->crafting.getElmt(i, j).getQuantity() - 1);
                                         this->crafting.setElmt(i, j, *newSlot);
 
+                                        // If an item within the grid reaches 0 quantity, delete it
                                         if (this->crafting.getGrid().at(i).at(j).getQuantity() == 0) {
-                                            // Move resulting item to inventory
-
                                             // Clear the crafting grid
                                             NonTool* itemdefault = new NonTool(0, "-", "-");
                                             newSlot->setSlotID(this->crafting.getElmt(i, j).getSlotID());
@@ -460,16 +461,15 @@ void Inventory::Craft(ItemList config, vector<Recipe> recipeList) {
                                             // Set possible to false to break the loop
                                             possible = false;
                                         }
-
-                                        
                                     }
                                 }
                             }
+
+                            // Move resulting item to inventory
                             if (!possible) {
                                 Tool* resultItem = new Tool(id, resultName, varian, 10);
                                 giveItem(resultItem, resultQuantity);
                             }
-
                         } 
                     }
                     y++; 
