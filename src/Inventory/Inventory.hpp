@@ -10,10 +10,11 @@
 #include "../Crafting/crafting.hpp"
 #include "InventorySlot.hpp"
 
+
 class Inventory {
 private:
     Crafting crafting;
-    InventorySlot* itemlist;
+    InventorySlot<Item*>* itemlist;
 public:
     Inventory();
     Inventory(Inventory&);

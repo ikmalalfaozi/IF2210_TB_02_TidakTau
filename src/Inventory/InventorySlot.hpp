@@ -8,23 +8,26 @@
 #include "../Item/NonTool.hpp"
 
 // Tahap perencanaan
+template <class T>
 class InventorySlot {
     private:
         string slotID;
-        Item* item;
+        T item;
         int quantity;
     public:
         InventorySlot();
 
-        InventorySlot& operator=(const InventorySlot&);
+        InventorySlot<T>& operator=(const InventorySlot<T>&);
 
         void set_slotID(string slotid);
-        void set_item(Item* itemid);
+        void set_item(T itemid);
         void set_quantity(int quantity);
 
         string get_slotID() const;
-        Item* get_item() const;
+        T get_item() const;
         int get_quantity() const;
 };
+
+template class InventorySlot<Item*>;
 
 #endif

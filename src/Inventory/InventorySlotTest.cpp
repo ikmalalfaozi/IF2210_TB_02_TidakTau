@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-void printInventorySlot(InventorySlot slot)
+void printInventorySlot(InventorySlot<Item*> slot)
 {
     cout << "SlotID: " << slot.get_slotID() << endl;
 
@@ -33,7 +33,7 @@ int main()
     if (testChoice == 1)
     {
         Tool* item1 = new Tool(21, "-", "WOODEN_SWORD", 1);
-        InventorySlot *slot1 = new InventorySlot();
+        InventorySlot<Item*> *slot1 = new InventorySlot<Item*>();
 
         slot1->set_slotID("I1");
         slot1->set_item(item1);
@@ -47,7 +47,7 @@ int main()
         // KETERANGAN: 
         // NONTOOL SEHARUSNYA TIDAK MEMILIKI DURABILITY, NAMUN AKHIRNYA DISET MENJADI 0
         NonTool* item2 = new NonTool(1, "LOG", "OAK_LOG");
-        InventorySlot *slot2 = new InventorySlot();
+        InventorySlot<Item*> *slot2 = new InventorySlot<Item*>();
 
         slot2->set_slotID("I1");
         slot2->set_item(item2);
@@ -56,7 +56,7 @@ int main()
         cout << "Slot 2 -- Item 2 (NonTool)" << endl;
         printInventorySlot(*slot2);
     } else {
-        InventorySlot *slot2 = new InventorySlot();
+        InventorySlot<Item*> *slot2 = new InventorySlot<Item*>();
 
         slot2->set_slotID("I1");
         slot2->set_quantity(1);
