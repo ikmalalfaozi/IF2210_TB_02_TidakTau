@@ -415,8 +415,6 @@ void Inventory::Craft(ItemList config, vector<Recipe> recipeList) {
         int id = config.getItemElmt(resultName).getId();
         string varian = config.getItemElmt(resultName).getVarian();
         string category = config.getItemElmt(resultName).getCategory();
-        int itemExist = 0;
-        int currentLoopCounter = 0;
         
         while (possible) {
             // Outer main loop
@@ -426,7 +424,6 @@ void Inventory::Craft(ItemList config, vector<Recipe> recipeList) {
                 while (y < 3 && possible) {
                     if (category == "NONTOOL") {
                         // Check if the recipe is still possible
-                        int loopCounter = 0;
                         Recipe checkResult = this->crafting.getRecipe(fullRecipeList);
                         if (checkResult.getHasilRecipe() != "Dummy Recipe") {
                             resultQuantity += result.getJumlah();
@@ -444,9 +441,6 @@ void Inventory::Craft(ItemList config, vector<Recipe> recipeList) {
                                         newSlot->setQuantity(this->crafting.getElmt(i, j).getQuantity() - 1);
                                         this->crafting.setElmt(i, j, *newSlot);
                                         delete newSlot;
-                                        if (i == 2 && j == 2) {
-                                            loopCounter++;
-                                        }
 
                                         if (this->crafting.getGrid().at(i).at(j).getQuantity() == 0) {
                                             // Clear the crafting grid
@@ -460,12 +454,10 @@ void Inventory::Craft(ItemList config, vector<Recipe> recipeList) {
                                     }
                                 }
                             }
-                            currentLoopCounter = loopCounter;
                         } else {
                             // If recipe is no longer available, set the flag to false
                             possible = false;
                         }
-
                         if (!possible) {
                             NonTool* resultItem = new NonTool(id, resultName, varian);
                             giveItem(resultItem, resultQuantity);
