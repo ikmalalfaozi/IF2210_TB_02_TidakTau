@@ -59,9 +59,6 @@ void Crafting::displayCraftingGrid() {
 bool Crafting::testRecipe(Recipe recipe) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            //cout << recipe.getDataElmt(i, j) << endl;
-            //cout << getElmt(i, j).getItem()->getType() << endl;
-            //cout << getElmt(i, j).getItem()->getVarian() << endl << endl;
             if (recipe.getDataElmt(i, j) != getElmt(i, j).getItem()->getType() && recipe.getDataElmt(i, j) != getElmt(i, j).getItem()->getVarian()) {
                 return false;
             }
@@ -78,7 +75,6 @@ Recipe Crafting::getRecipe(vector<Recipe> recipeList) {
     bool found = false;
 
     for (it = recipeList.begin(); it != recipeList.end(); ++it) {
-        //it->printRecipe();
         if (testRecipe(*it)) {
             found = true;
             return (*it);
